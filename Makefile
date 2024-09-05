@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anomourn <anomourn@student.42.fr>          +#+  +:+       +#+         #
+#    By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/04 12:48:12 by anomourn         ###   ########.fr        #
+#    Updated: 2024/09/04 19:40:53 by aeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,12 @@ NAME = minirt
 
 NAME_BONUS = minirt_bonus
 
-SRCS = 
+SRCS =	./get_next_line/get_next_line.c \
+		./get_next_line/get_next_line_utils.c \
+		main.c \
+		./parsing/parsing.c \
+		./parsing/read_check_assign.c \
+
 
 SRCS_BONUS =
 
