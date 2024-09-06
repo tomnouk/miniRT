@@ -6,7 +6,7 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:15:18 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/04 19:31:59 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/06 16:35:08 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,24 @@ static void check_and_open_file(char *file, int argc)
 	close(fd);
 }
 
+static void allocate_elem_initialize(t_elem *elem, char *file)
+{
+	int fd;
+	int num_of_elem;
+	int i;
+	
+	fd = open(file, O_RDONLY);
+	i = -1;
+	num_of_elem = get_num_of_elem(fd);
+	elem = malloc(sizeof(t_elem) * num_of_elem);
+	while (++i < num_of_elem)
+		ft_bzero(&elem[i], sizeof(t_elem));
+	close(fd);
+}
+
 void parsing(t_elem *elem, char *file, int argc)
 {
 	check_and_open_file(file, argc);
-	elem = malloc(sizeof(t_elem));
-	ft_bzero(elem, sizeof(t_elem));
+	allocate_elem_initialize(elem, file);
 	read_check_assign(elem, file);
 }

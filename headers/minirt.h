@@ -6,7 +6,7 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/04 19:40:30 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/06 16:01:09 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define ERROR_ARGS "Error\nInvalid arguments"
 # define ERROR_FILE "Error\n"
 # define ERROR_MAP "Error\nInvalid map"
+# define ERROR_TYPE "Error\nInvalid type"
 
 typedef enum type
 {
@@ -30,7 +31,9 @@ typedef enum type
 	A,
 	C,
 	L,
-	SP
+	pl,
+	sp,
+	cy,
 }			t_type;
 
 typedef struct s_axes
@@ -62,3 +65,5 @@ typedef struct s_elem
 
 void parsing(t_elem *elem, char *file, int argc);
 void read_check_assign(t_elem *elem, char *file);
+int get_num_of_elem(int fd);
+bool check_empty_line(char *line);

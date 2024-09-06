@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpaic <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:05:09 by rpaic             #+#    #+#             */
-/*   Updated: 2023/10/09 12:05:13 by rpaic            ###   ########.fr       */
+/*   Updated: 2024/09/06 15:18:57 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@
 
 int	ft_isalpha(int c)
 {
-	if ((c > 64 && c < 91) || (c > 96 && c < 123))
+	if (c > 64 && c < 91)
 		return (1);
+	else if (c > 96 && c < 123)
+		return (2);
 	return (0);
 }
 
 /*int main(void)
 {
-	printf("a->%d\n", isalpha('a'));
-	printf("A->%d\n", isalpha('A'));
+	printf("a->%d\n", isalpha('a')); 97
+	printf("A->%d\n", isalpha('A')); 65
 	printf("8->%d\n", isalpha('8'));
 	printf("B->%d\n", isalpha('B'));
 	
