@@ -6,7 +6,7 @@
 #    By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/06 14:42:40 by aeid             ###   ########.fr        #
+#    Updated: 2024/09/10 14:18:41 by aeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,11 @@ SRCS =	./get_next_line/get_next_line.c \
 		./parsing/parsing.c \
 		./parsing/read_check_assign.c \
 		./parsing/get_number_of_elements.c \
+		./parsing/read_check_utils.c \
+		./parsing/utils_checks.c \
+		./parsing/ft_atof.c \
+		./parsing/Ambient.c \
+		./parsing/Camera.c \
 
 
 SRCS_BONUS =

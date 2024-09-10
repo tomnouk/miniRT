@@ -6,13 +6,13 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/06 14:41:35 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/06 15:01:58 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 11:06:15 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../headers/minirt.h"
 
-bool ft_isspace(char c)
+static bool ft_isspace(char c)
 {
 	if (c == '\0')
 		return (false);
