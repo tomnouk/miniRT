@@ -6,9 +6,12 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 18:00:56 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 19:46:54 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef MINIRT_H
+# define MINIRT_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,6 +38,12 @@
 # define ERROR_CAMERA_POSITION "Error\nInvalid camera position\n"
 # define ERROR_CAMERA_FOV "Error\nInvalid camera fov\n"
 # define ERROR_CAMERA_ORIENTATION "Error\nInvalid camera orientation\n"
+# define ERROR_LIGHT "Error\nInvalid light\n"
+# define ERROR_LIGHT_POSITION "Error\nInvalid light position\n"
+# define ERROR_LIGHT_RATIO "Error\nInvalid light ratio\n"
+# define ERROR_LIGHT_COLOR "Error\nInvalid light color\n"
+# define ER_LIGHT_COLOR_VALUE "Error\nInvalid light color value\n"
+# define ERROR_REPITITION "Error\nRepitition of element\n"
 
 typedef enum type
 {
@@ -77,7 +86,7 @@ typedef struct s_elem
 }			t_elem;
 
 void parsing(t_elem *elem, char *file, int argc);
-void read_check_assign(t_elem *elem, char *file);
+void read_check_assign(t_elem *elem, char *file, int *status);
 int get_num_of_elem(int fd);
 bool check_empty_line(char *line);
 void ft_free_split(char **split);
@@ -89,3 +98,10 @@ int ft_split_len(char **split);
 bool check_digits(char **l_split);
 int check_digits_advanced(char *str);
 void check_assign_camera(char **l_split, t_elem *elem, int *status);
+void check_assign_light(char **l_split, t_elem *elem, int *status);
+int validate_color_values(char **split_color, int *status, int type);
+void check_repitition(t_elem *elem, int *status);
+
+#endif
+
+

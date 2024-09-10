@@ -6,7 +6,7 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 13:56:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 17:55:58 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 18:34:43 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,24 @@ int check_digits_advanced(char *str)
 		i++;
 	}
 	return (0);
+}
+
+int validate_color_values(char **split_color, int *status, int type)
+{
+    int i = -1;
+
+    while (split_color[++i])
+    {
+        if (check_digits_advanced(split_color[i] + 1))
+        {
+            (*status)++;
+			if (type == 0)
+				printf("%s", ER_AMBIENT_COLOR_VALUE);
+			if (type == 1)
+				printf("%s", ER_LIGHT_COLOR_VALUE);
+            ft_free_split(split_color);
+            return 1;
+        }
+    }
+    return 0;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:15:18 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 14:37:38 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:02:46 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,16 @@ static void allocate_elem_initialize(t_elem **elem, char *file)
 
 void parsing(t_elem *elem, char *file, int argc)
 {
+	int status;
+
+	status = 0;
 	check_and_open_file(file, argc);
 	allocate_elem_initialize(&elem, file);
-	read_check_assign(elem, file);
+	read_check_assign(elem, file, &status);
+	get_next_line(-1);
+	if (status)
+	{
+		free(elem);
+		exit(1);
+	}
 }

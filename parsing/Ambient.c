@@ -6,18 +6,18 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 11:14:05 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 17:57:10 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 18:34:57 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../headers/minirt.h"
 
 #include "../headers/minirt.h"
 
 static void assign_color_ambient(char *line, t_elem *elem, int *status)
 {
 	char **split_color;
-	int i;
 
-	i = -1;
 	split_color = ft_split(line, ',');
 	if (ft_split_len(split_color) != 3)
 	{
@@ -26,16 +26,8 @@ static void assign_color_ambient(char *line, t_elem *elem, int *status)
 		ft_free_split(split_color);
 		return ;
 	}
-	while (split_color[++i])
-	{
-		if (check_digits_advanced(split_color[i] + 1))
-		{
-			(*status)++;
-			printf("%s", ER_AMBIENT_COLOR_VALUE);
-			ft_free_split(split_color);
-			return ;
-		}
-	}
+	if (validate_color_values(split_color, status, 0))
+		return ;
 	elem->color.r = ft_atoi(split_color[0]);
 	elem->color.g = ft_atoi(split_color[1]);
 	elem->color.b = ft_atoi(split_color[2]);

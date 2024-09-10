@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+         #
+#    By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/10 16:48:48 by sdell-er         ###   ########.fr        #
+#    Updated: 2024/09/10 18:40:15 by aeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS =	./get_next_line/get_next_line.c \
 		./parsing/ft_atof.c \
 		./parsing/Ambient.c \
 		./parsing/Camera.c \
+		./parsing/Light.c \
 		./vectors/operations.c
 
 SRCS_BONUS =
