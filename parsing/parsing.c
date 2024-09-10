@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:15:18 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/06 17:07:32 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 14:37:38 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ static void allocate_elem_initialize(t_elem **elem, char *file)
 	fd = open(file, O_RDONLY);
 	i = -1;
 	num_of_elem = get_num_of_elem(fd);
+	if (num_of_elem == 0)
+	{
+		printf("%s", ERROR_EMPTY_FILE);
+		exit(1);
+	}
 	*elem = malloc(sizeof(t_elem) * (num_of_elem + 1));
 	while (++i < num_of_elem)
 		ft_bzero(&(*elem)[i], sizeof(t_elem));

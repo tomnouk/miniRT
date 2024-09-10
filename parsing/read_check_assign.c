@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_check_assign.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:00:52 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 14:19:51 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 14:35:46 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void check_first_char(char *string, int *status, t_elem *elem)
 			elem->type = C;
 		else if (!ft_strncmp(string, "L", 1))
 			elem->type = L;
+		else
+			(*status)++;
 	}
 	else if (type == 2)
 	{
@@ -39,6 +41,8 @@ static void check_first_char(char *string, int *status, t_elem *elem)
 			elem->type = sp;
 		else if (!ft_strncmp(string, "cy", 2))
 			elem->type = cy;
+		else
+			(*status)++;
 	}
 	else
 		(*status)++;

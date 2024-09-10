@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 14:21:45 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 14:37:32 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 # define ERROR_ARGS "Error\nInvalid arguments\n"
 # define ERROR_FILE "Error\n"
+# define ERROR_EMPTY_FILE "Error\nEmpty file\n"
 # define ERROR_MAP "Error\nInvalid map\n"
 # define ERROR_TYPE "Error\nInvalid type\n"
 # define ERROR_AMBIENT "Error\nInvalid ambient\n"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atof.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 11:40:11 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 12:33:43 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 14:45:33 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,15 @@ double ft_atof(char *str)
 	double divisor;
 	bool negative;
 	bool fract;
+	bool dot;
 
 	assigning(&result, &fraction, &divisor, &negative);
 	handle_sign(&str, &negative, &fract);
-	while (*str && (ft_isdigit(*str) || *str == '.'))
+	dot = false;
+	while (*str && (ft_isdigit(*str) || (*str == '.' && !dot)))
 	{
+		if (*str == '.')
+			dot = true;
 		if (*str == '.')
 			fract = true;
 		while (*str == '.')
