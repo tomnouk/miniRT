@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 14:37:32 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:56:55 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define ERROR_AMBIENT "Error\nInvalid ambient\n"
 # define ERROR_AMBIENT_RATIO "Error\nInvalid ambient ratio\n"
 # define ERROR_AMBIENT_COLOR "Error\nInvalid ambient color\n"
+# define ER_AMBIENT_COLOR_VALUE "Error\nInvalid ambient color value\n"
 # define ERROR_CAMERA "Error\nInvalid camera\n"
 # define ERROR_CAMERA_POSITION "Error\nInvalid camera position\n"
 # define ERROR_CAMERA_FOV "Error\nInvalid camera fov\n"
@@ -83,4 +84,5 @@ bool check_status(int *status, char **l_split);
 void check_assign_ambient(char **l_split, t_elem *elem, int *status);
 int ft_split_len(char **split);
 bool check_digits(char **l_split);
+int check_digits_advanced(char *str);
 void check_assign_camera(char **l_split, t_elem *elem, int *status);

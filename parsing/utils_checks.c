@@ -6,7 +6,7 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 13:56:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 13:57:00 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 17:55:58 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ int ft_split_len(char **split)
 	return (i);
 }
 
-static bool ft_isdigit_advanced(char c)
+static int ft_isdigit_advanced(char c)
 {
-	if ((c >= '0' && c <= '9') || c == '.' || c == '-' || c == '+' || c == ',')
-		return (true);
-	return (false);
+	if (c >= '0' && c <= '9')
+		return (1);
+	if (c == '.' || c == '-' || c == '+' || c == ',')
+		return (2);
+	return (0);
 }
 
 bool check_digits(char **l_split)
@@ -48,4 +50,23 @@ bool check_digits(char **l_split)
 		j++;
 	}
 	return (false);
+}
+
+int check_digits_advanced(char *str)
+{
+	int i;
+	int output;
+
+	i = 0;
+	output = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		output = ft_isdigit_advanced(str[i]);
+		if (output == 2)
+			return (1);
+		i++;
+	}
+	return (0);
 }
