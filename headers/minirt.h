@@ -6,7 +6,7 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 17:56:55 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/10 18:00:56 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ typedef struct s_axes
 	double	z;
 }			t_axes;
 
+typedef t_axes t_vector;
+typedef t_axes t_point;
+
 typedef struct s_color
 {
 	int		r;
@@ -64,8 +67,8 @@ typedef struct s_color
 typedef struct s_elem
 {
 	t_type	type;
-	t_axes	pos; //cooredinates x, y, z
-	t_axes	orientation; //vector x, y, z
+	t_point	pos; //cooredinates x, y, z
+	t_vector	orientation; //vector x, y, z
 	t_color	color;
 	int		fov; //from 0 to 180
 	double	ratio; //should be between 0 and 1
