@@ -6,19 +6,18 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:01:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/06 16:46:24 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/11 20:11:47 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minirt.h"
 
-int main (int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_elem *elem;
-	
+	t_elem	*elem;
+
 	elem = NULL;
 	parsing(elem, argv[1], argc);
-
 	free(elem);
 	return (0);
 }
