@@ -6,17 +6,17 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:15:18 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 19:02:46 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/11 19:51:20 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minirt.h"
 
-static void check_and_open_file(char *file, int argc)
+static void	check_and_open_file(char *file, int argc)
 {
-	int fd;
-	char *p;
-	
+	int		fd;
+	char	*p;
+
 	p = NULL;
 	fd = 0;
 	if (file)
@@ -24,7 +24,7 @@ static void check_and_open_file(char *file, int argc)
 	if (argc != 2 || !file || *file == '\0' || !p || ft_strncmp(p, ".rt", 3))
 	{
 		printf("%s", ERROR_ARGS);
-		exit (1);
+		exit(1);
 	}
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
@@ -36,12 +36,12 @@ static void check_and_open_file(char *file, int argc)
 	close(fd);
 }
 
-static void allocate_elem_initialize(t_elem **elem, char *file)
+static void	allocate_elem_initialize(t_elem **elem, char *file)
 {
-	int fd;
-	int num_of_elem;
-	int i;
-	
+	int	fd;
+	int	num_of_elem;
+	int	i;
+
 	fd = open(file, O_RDONLY);
 	i = -1;
 	num_of_elem = get_num_of_elem(fd);
@@ -57,9 +57,9 @@ static void allocate_elem_initialize(t_elem **elem, char *file)
 	close(fd);
 }
 
-void parsing(t_elem *elem, char *file, int argc)
+void	parsing(t_elem *elem, char *file, int argc)
 {
-	int status;
+	int	status;
 
 	status = 0;
 	check_and_open_file(file, argc);

@@ -6,17 +6,15 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 11:14:05 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 18:34:57 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/11 19:50:02 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minirt.h"
 
-#include "../headers/minirt.h"
-
-static void assign_color_ambient(char *line, t_elem *elem, int *status)
+static void	assign_color_ambient(char *line, t_elem *elem, int *status)
 {
-	char **split_color;
+	char	**split_color;
 
 	split_color = ft_split(line, ',');
 	if (ft_split_len(split_color) != 3)
@@ -32,14 +30,15 @@ static void assign_color_ambient(char *line, t_elem *elem, int *status)
 	elem->color.g = ft_atoi(split_color[1]);
 	elem->color.b = ft_atoi(split_color[2]);
 	ft_free_split(split_color);
-	if (elem->color.r < 0 || elem->color.r > 255 || elem->color.g < 0 || elem->color.g > 255 || elem->color.b < 0 || elem->color.b > 255)
+	if (elem->color.r < 0 || elem->color.r > 255 || elem->color.g < 0
+		|| elem->color.g > 255 || elem->color.b < 0 || elem->color.b > 255)
 	{
 		(*status)++;
 		printf("%s", ERROR_AMBIENT_COLOR);
 	}
 }
 
-void check_assign_ambient(char **l_split, t_elem *elem, int *status)
+void	check_assign_ambient(char **l_split, t_elem *elem, int *status)
 {
 	if (ft_split_len(l_split) != 3 || check_digits(l_split))
 	{
@@ -48,7 +47,6 @@ void check_assign_ambient(char **l_split, t_elem *elem, int *status)
 		return ;
 	}
 	elem->ratio = ft_atof(l_split[1]);
-	//printf("%f\n", elem->ratio);
 	if (elem->ratio < 0 || elem->ratio > 1 || isnan(elem->ratio))
 	{
 		(*status)++;
@@ -56,7 +54,4 @@ void check_assign_ambient(char **l_split, t_elem *elem, int *status)
 		return ;
 	}
 	assign_color_ambient(l_split[2], elem, status);
-	// printf("%d\n", elem->color.r);
-	// printf("%d\n", elem->color.g);
-	// printf("%d\n", elem->color.b);
 }

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Light.c                                            :+:      :+:    :+:   */
+/*   Sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 18:05:05 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/11 20:04:37 by aeid             ###   ########.fr       */
+/*   Created: 2024/09/11 15:32:12 by aeid              #+#    #+#             */
+/*   Updated: 2024/09/11 19:52:03 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minirt.h"
 
-static bool	assign_position_light(char *line, t_elem *elem, int *status)
+static bool	assign_position_sphere(char *line, t_elem *elem, int *status)
 {
 	char	**split_position;
 
@@ -20,7 +20,7 @@ static bool	assign_position_light(char *line, t_elem *elem, int *status)
 	if (ft_split_len(split_position) != 3)
 	{
 		(*status)++;
-		printf("%s", ERROR_LIGHT_POSITION);
+		printf("%s", ERROR_SPHERE_POSITION);
 		ft_free_split(split_position);
 		return (true);
 	}
@@ -31,7 +31,7 @@ static bool	assign_position_light(char *line, t_elem *elem, int *status)
 	return (false);
 }
 
-static void	assign_color_light(char *line, t_elem *elem, int *status)
+static void	assign_color_sphere(char *line, t_elem *elem, int *status)
 {
 	char	**split_color;
 
@@ -39,11 +39,11 @@ static void	assign_color_light(char *line, t_elem *elem, int *status)
 	if (ft_split_len(split_color) != 3)
 	{
 		(*status)++;
-		printf("%s", ERROR_LIGHT_COLOR);
+		printf("%s", ERROR_SPHERE_COLOR);
 		ft_free_split(split_color);
 		return ;
 	}
-	if (validate_color_values(split_color, status, 1))
+	if (validate_color_values(split_color, status, 2))
 		return ;
 	elem->color.r = ft_atoi(split_color[0]);
 	elem->color.g = ft_atoi(split_color[1]);
@@ -53,26 +53,26 @@ static void	assign_color_light(char *line, t_elem *elem, int *status)
 		|| elem->color.g > 255 || elem->color.b < 0 || elem->color.b > 255)
 	{
 		(*status)++;
-		printf("%s", ERROR_LIGHT_COLOR);
+		printf("%s", ERROR_SPHERE_COLOR);
 	}
 }
 
-void	check_assign_light(char **l_split, t_elem *elem, int *status)
+void	check_assign_sphere(char **l_split, t_elem *elem, int *status)
 {
 	if (ft_split_len(l_split) != 4 || check_digits(l_split))
 	{
 		(*status)++;
-		printf("%s", ERROR_LIGHT);
+		printf("%s", ERROR_SPHERE);
 		return ;
 	}
-	if (assign_position_light(l_split[1], elem, status))
+	if (assign_position_sphere(l_split[1], elem, status))
 		return ;
-	elem->ratio = ft_atof(l_split[2]);
-	if (elem->ratio < 0 || elem->ratio > 1 || isnan(elem->ratio))
+	elem->diameter = ft_atof(l_split[2]);
+	if (elem->diameter <= 0 || isnan(elem->diameter))
 	{
 		(*status)++;
-		printf("%s", ERROR_LIGHT_RATIO);
+		printf("%s", ERROR_SPHERE_DIAMETER);
 		return ;
 	}
-	assign_color_light(l_split[3], elem, status);
+	assign_color_sphere(l_split[3], elem, status);
 }

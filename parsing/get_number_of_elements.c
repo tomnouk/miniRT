@@ -6,24 +6,25 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/06 14:41:35 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 11:06:15 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/11 20:04:00 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../headers/minirt.h"
+#include "../headers/minirt.h"
 
-static bool ft_isspace(char c)
+static bool	ft_isspace(char c)
 {
 	if (c == '\0')
 		return (false);
-    if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r')
 		return (true);
 	return (false);
 }
 
-bool check_empty_line(char *line)
+bool	check_empty_line(char *line)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (ft_isspace(line[++i]))
@@ -33,10 +34,10 @@ bool check_empty_line(char *line)
 	return (true);
 }
 
-int get_num_of_elem(int fd)
+int	get_num_of_elem(int fd)
 {
-	int num_of_elem;
-	char *line;
+	int		num_of_elem;
+	char	*line;
 
 	num_of_elem = 0;
 	line = get_next_line(fd);

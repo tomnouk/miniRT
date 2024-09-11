@@ -6,22 +6,16 @@
 /*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:00:52 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/10 18:54:48 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/11 20:04:17 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minirt.h"
 
-
-static void check_first_char(char *string, int *status, t_elem *elem)
+static void	check_first_char(char *string, int *status, t_elem *elem)
 {
-	int type;
-	
-	type = ft_isalpha(string[0]);
-	if (type == 1)
+	if (ft_strlen(string) == 1)
 	{
-		if (ft_strlen(string) > 1)
-			(*status)++;
 		if (!ft_strncmp(string, "A", 1))
 			elem->type = A;
 		else if (!ft_strncmp(string, "C", 1))
@@ -31,10 +25,8 @@ static void check_first_char(char *string, int *status, t_elem *elem)
 		else
 			(*status)++;
 	}
-	else if (type == 2)
+	else if (ft_strlen(string) == 2)
 	{
-		if (ft_strlen(string) > 2)
-			(*status)++;
 		if (!ft_strncmp(string, "pl", 2))
 			elem->type = pl;
 		else if (!ft_strncmp(string, "sp", 2))
@@ -48,41 +40,29 @@ static void check_first_char(char *string, int *status, t_elem *elem)
 		(*status)++;
 }
 
-
-/// debug
-// void print_matrix(char **l_split)
-// {
-// 	int i;
-
-// 	i = -1;
-// 	while (l_split[++i])
-// 		printf("%s\n", l_split[i]);
-// }
-
-static void distribution_assign(char **l_split, t_elem *elem, int *status)
+static void	distribution_assign(char **l_split, t_elem *elem, int *status)
 {
 	if (elem->type == A)
 		check_assign_ambient(l_split, elem, status);
 	else if (elem->type == C)
-	 	check_assign_camera(l_split, elem, status);
+		check_assign_camera(l_split, elem, status);
 	else if (elem->type == L)
 		check_assign_light(l_split, elem, status);
-	// else if (elem->type == pl)
-	// 	check_assign_plane(l_split, elem, status);
-	// else if (elem->type == sp)
-	// 	check_assign_sphere(l_split, elem, status);
-	// else if (elem->type == cy)
-	// 	check_assign_cylinder(l_split, elem, status);
+	else if (elem->type == pl)
+		check_assign_plane(l_split, elem, status);
+	else if (elem->type == sp)
+		check_assign_sphere(l_split, elem, status);
+	else if (elem->type == cy)
+		check_assign_cylinder(l_split, elem, status);
 }
 
-static void check_assign(char *line, int *status, t_elem *elem)
+static void	check_assign(char *line, int *status, t_elem *elem)
 {
-	char **l_split;
+	char	**l_split;
 
 	l_split = NULL;
 	remove_next_line(line);
 	l_split = ft_split(line, ' ');
-	//print_matrix(l_split);
 	check_first_char(l_split[0], status, elem);
 	if (check_status(status, l_split))
 		return ;
@@ -90,11 +70,11 @@ static void check_assign(char *line, int *status, t_elem *elem)
 	ft_free_split(l_split);
 }
 
-void read_check_assign(t_elem *elem, char *file, int *status)
+void	read_check_assign(t_elem *elem, char *file, int *status)
 {
-	int fd;
-	char *line;
-	int i;
+	int		fd;
+	char	*line;
+	int		i;
 
 	fd = open(file, O_RDONLY);
 	i = -1;
@@ -109,7 +89,8 @@ void read_check_assign(t_elem *elem, char *file, int *status)
 		line = NULL;
 		line = get_next_line(fd);
 	}
-	check_repitition(elem, status);
+	if (!*status)
+		check_repitition(elem, status);
 	if (line != NULL)
 		free(line);
 	close(fd);
