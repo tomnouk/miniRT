@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/12 23:53:53 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/13 01:38:33 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@
 # define ERROR_CYLINDER_COLOR "Error\nInvalid cylinder color\n"
 # define ER_CYLINDER_COLOR_VALUE "Error\nInvalid cylinder color value\n"
 
-# define WIDTH 8
-# define HEIGHT 6
+# define WIDTH 800
+# define HEIGHT 600
 
 typedef enum type
 {
@@ -100,7 +100,7 @@ typedef struct s_elem
 	t_point		pos;
 	t_vector	orientation;
 	t_color		color;
-	int			fov;
+	double		fov;
 	double		ratio;
 	double		diameter;
 	double		height;

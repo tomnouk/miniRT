@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:01:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/13 00:00:19 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/13 01:47:31 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,33 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	minilibx_init(t_minilibx *s_mlx, t_elem *elem)
+void	minilibx_init(t_minilibx *smlx, t_elem *elem)
 {
-	s_mlx->mlx = mlx_init();
-	if (!s_mlx->mlx)
+	smlx->mlx = mlx_init();
+	if (!smlx->mlx)
 	{
 		free(elem);
 		exit(EXIT_FAILURE);
 	}
-	s_mlx->mlx_win = mlx_new_window(s_mlx->mlx, WIDTH, HEIGHT, s_mlx->name);
-	if (!s_mlx->mlx_win)
+	smlx->mlx_win = mlx_new_window(smlx->mlx, WIDTH, HEIGHT, smlx->name);
+	if (!smlx->mlx_win)
 	{
-		mlx_destroy_display(s_mlx->mlx);
-		free(s_mlx->mlx);
+		mlx_destroy_display(smlx->mlx);
+		free(smlx->mlx);
 		free(elem);
 		exit(EXIT_FAILURE);
 	}
-	s_mlx->img.img = mlx_new_image(s_mlx->mlx, WIDTH, HEIGHT);
-	if (!s_mlx->img.img)
+	smlx->img.img = mlx_new_image(smlx->mlx, WIDTH, HEIGHT);
+	if (!smlx->img.img)
 	{
-		mlx_destroy_window(s_mlx->mlx, s_mlx->mlx_win);
-		mlx_destroy_display(s_mlx->mlx);
-		free(s_mlx->mlx);
+		mlx_destroy_window(smlx->mlx, smlx->mlx_win);
+		mlx_destroy_display(smlx->mlx);
+		free(smlx->mlx);
 		free(elem);
 		exit(EXIT_FAILURE);
 	}
-	s_mlx->img.addr = mlx_get_data_addr(s_mlx->img.img,
-			&s_mlx->img.bits_per_pixel, &s_mlx->img.line_length,
-			&s_mlx->img.endian);
+	smlx->img.addr = mlx_get_data_addr(smlx->img.img, &smlx->img.bits_per_pixel,
+			&smlx->img.line_length, &smlx->img.endian);
 }
 
 int	esc(t_data *data)
@@ -100,21 +99,18 @@ t_vector	rotate_vector(t_vector v, t_vector orientation)
 	return (res);
 }
 
-void	build_ray(t_data *data, t_point pixel_camera)
+int	build_ray(t_data *data, t_point pixel_camera)
 {
 	t_point		origin;
 	t_vector	direction;
-	t_elem		camera;
+	t_elem		*camera;
 
-	camera = *get_type_element(data->elem, C);
+	camera = get_type_element(data->elem, C);
 	origin = (t_point){0, 0, 0};
 	direction = normalize(two_points_vect(origin, pixel_camera));
-	origin = axes_sum(origin, camera.pos);
-	direction = rotate_vector(direction, camera.orientation);
-	printf("origin: %f %f %f\n", origin.x, origin.y, origin.z);
-	printf("direction: %f %f %f\n", direction.x, direction.y, direction.z);
-	printf("\n");
-	printf("\n");
+	origin = axes_sum(origin, camera->pos);
+	direction = rotate_vector(direction, camera->orientation);
+	return (create_trgb(0, 255, 255, 255));
 }
 
 void	build_image(t_data *data)
@@ -123,7 +119,9 @@ void	build_image(t_data *data)
 	int		y;
 	double	pixel_camera_x;
 	double	pixel_camera_y;
+	t_elem	camera;
 
+	camera = *get_type_element(data->elem, C);
 	y = 0;
 	while (y < HEIGHT)
 	{
@@ -131,14 +129,11 @@ void	build_image(t_data *data)
 		while (x < WIDTH)
 		{
 			pixel_camera_x = (2 * (2 * (x + 0.5) / WIDTH - 1) - 1)
-				* WIDTH / (double)HEIGHT * tan(data->elem->fov / 2.0);
+				* WIDTH / (double)HEIGHT * tan(camera.fov / 2.0);
 			pixel_camera_y = (1 - 2 * (2 * (y + 0.5) / HEIGHT - 1))
-				* tan(data->elem->fov / 2.0);
-			printf("pixel_camera_x: %f\n", pixel_camera_x);
-			printf("pixel_camera_y: %f\n", pixel_camera_y);
-			printf("\n");
-			printf("\n");
-			//build_ray(data, (t_point){pixel_camera_x, pixel_camera_y, 1});
+				* tan(camera.fov / 2.0);
+			my_mlx_pixel_put(&data->mlx_struct->img, x, y,
+				build_ray(data, (t_point){pixel_camera_x, pixel_camera_y, 1}));
 			x++;
 		}
 		y++;
@@ -153,11 +148,15 @@ int	main(int argc, char **argv)
 
 	elem = NULL;
 	parsing(&elem, argv[1], argc);
+	get_type_element(elem, C)->fov = get_type_element(elem, C)->fov
+	* M_PI / 180;
 	mlx_struct.name = argv[1];
 	minilibx_init(&mlx_struct, elem);
 	data.elem = elem;
 	data.mlx_struct = &mlx_struct;
 	build_image(&data);
+	mlx_put_image_to_window(mlx_struct.mlx, mlx_struct.mlx_win,
+		mlx_struct.img.img, 0, 0);
 	mlx_hook(mlx_struct.mlx_win, 2, 1L << 0, key_down, &data);
 	mlx_hook(mlx_struct.mlx_win, 17, 0L, esc, &data);
 	mlx_loop(mlx_struct.mlx);
