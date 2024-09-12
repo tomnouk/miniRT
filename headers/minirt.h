@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/11 19:52:33 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/12 23:53:53 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "../libft/libft.h"
 # include "get_next_line.h"
+# include "../minilibx-linux/mlx.h"
+# include <X11/keysym.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <math.h>
@@ -61,6 +63,9 @@
 # define ERROR_CYLINDER_COLOR "Error\nInvalid cylinder color\n"
 # define ER_CYLINDER_COLOR_VALUE "Error\nInvalid cylinder color value\n"
 
+# define WIDTH 8
+# define HEIGHT 6
+
 typedef enum type
 {
 	NONE,
@@ -101,7 +106,31 @@ typedef struct s_elem
 	double		height;
 }				t_elem;
 
-void			parsing(t_elem *elem, char *file, int argc);
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_img;
+
+typedef struct s_minilibx
+{
+	void		*mlx;
+	void		*mlx_win;
+	char		*name;
+	t_img		img;
+}	t_minilibx;
+
+typedef struct t_data
+{
+	t_minilibx	*mlx_struct;
+	t_elem		*elem;
+}	t_data;
+
+
+void			parsing(t_elem **elem, char *file, int argc);
 void			read_check_assign(t_elem *elem, char *file, int *status);
 int				get_num_of_elem(int fd);
 bool			check_empty_line(char *line);
@@ -122,5 +151,10 @@ void			check_assign_sphere(char **l_split, t_elem *elem, int *status);
 void			check_assign_plane(char **l_split, t_elem *elem, int *status);
 void			check_assign_cylinder(char **l_split, t_elem *elem,
 					int *status);
+
+t_vector		normalize(t_vector v);
+t_vector		two_points_vect(t_point a, t_point b);
+t_vector		axes_sum(t_axes a, t_axes b);
+double			dot_product(t_vector a, t_vector b);
 
 #endif
