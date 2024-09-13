@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/13 01:38:33 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/13 18:07:04 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@
 
 # define WIDTH 800
 # define HEIGHT 600
+# define BACKGROUND_R 255
+# define BACKGROUND_G 255
+# define BACKGROUND_B 255
 
 typedef enum type
 {
@@ -123,12 +126,45 @@ typedef struct s_minilibx
 	t_img		img;
 }	t_minilibx;
 
+typedef struct s_light
+{
+	t_point		pos;
+	double		ratio;
+	t_color		color;
+}	t_light;
+
+typedef struct s_amblight
+{
+	double		ratio;
+	t_color		color;
+}	t_amblight;
+
+typedef struct camera
+{
+	t_point		pos;
+	t_vector	orientation;
+	double		fov;
+}	t_camera;
+
+typedef struct s_object
+{
+	t_type		type;
+	t_point		pos;
+	t_vector	orientation;
+	double		diameter;
+	double		height;
+	t_color		color;
+}	t_object;
+
 typedef struct t_data
 {
 	t_minilibx	*mlx_struct;
-	t_elem		*elem;
+	t_light		light;
+	t_amblight	ambient;
+	t_camera	camera;
+	t_object	*objects;
+	int			num_of_objects;
 }	t_data;
-
 
 void			parsing(t_elem **elem, char *file, int argc);
 void			read_check_assign(t_elem *elem, char *file, int *status);
@@ -155,6 +191,8 @@ void			check_assign_cylinder(char **l_split, t_elem *elem,
 t_vector		normalize(t_vector v);
 t_vector		two_points_vect(t_point a, t_point b);
 t_vector		axes_sum(t_axes a, t_axes b);
+t_vector		axes_sub(t_axes a, t_axes b);
 double			dot_product(t_vector a, t_vector b);
+t_vector		cross_product(t_vector a, t_vector b);
 
 #endif
