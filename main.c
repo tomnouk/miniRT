@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:01:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/14 01:48:23 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 13:27:19 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,78 @@ int	key_down(int keycode, t_data *data)
 {
 	if (keycode == XK_Escape)
 		esc(data);
+	if (keycode == XK_q)
+	{
+		data->selected_object = NULL;
+		data->option = NOTHING;
+		mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
+		return (0);
+	}
+	else if (keycode == XK_d && data->selected_object->type == sp && data->option == NOTHING)
+	{
+		data->option = D;
+		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected diameter");
+		return (0);
+	}
+	else if (keycode == XK_h && data->selected_object->type == cy && data->option == NOTHING)
+	{
+		data->option = H;
+		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected height");
+		return (0);
+	}
+	else if (keycode == XK_x && data->option == NOTHING)
+	{
+		data->option = X;
+		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected x");
+		return (0);
+	}
+	else if (keycode == XK_y && data->option == NOTHING)
+	{
+		data->option = Y;
+		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected y");
+		return (0);
+	}
+	else if (keycode == XK_z && data->option == NOTHING)
+	{
+		data->option = Z;
+		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected z");
+		return (0);
+	}
+	else if (keycode == XK_plus)
+	{
+		if (data->option == D)
+			data->selected_object->diameter *= 1.1;
+		if (data->option == H)
+			data->selected_object->height *= 1.1;
+		if (data->option == X)
+			data->selected_object->orientation.x += 1;
+		if (data->option == Y)
+			data->selected_object->orientation.y += 1;
+		if (data->option == Z)
+			data->selected_object->orientation.z += 1;
+	}
+	else if (keycode == XK_minus)
+	{
+		if (data->option == D)
+			data->selected_object->diameter /= 1.1;
+		if (data->option == H)
+			data->selected_object->height /= 1.1;
+		if (data->option == X)
+			data->selected_object->orientation.x -= 1;
+		if (data->option == Y)
+			data->selected_object->orientation.y -= 1;
+		if (data->option == Z)
+			data->selected_object->orientation.z -= 1;
+	}
+	else if (keycode == XK_Up && data->selected_object != NULL)
+		data->selected_object->pos.y += 1;
+	else if (keycode == XK_Down && data->selected_object != NULL)
+		data->selected_object->pos.y -= 1;
+	else if (keycode == XK_Left && data->selected_object != NULL)
+		data->selected_object->pos.x -= 1;
+	else if (keycode == XK_Right && data->selected_object != NULL)
+		data->selected_object->pos.x += 1;
+	mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
 	return (0);
 }
 
@@ -237,6 +309,15 @@ double	light_intensity(t_data *data, t_vector direction, t_point p,
 	return (intensity * data->light.ratio);
 }
 
+void	get_camera_ray(t_data *data, t_point pixel_camera,
+	t_point *origin, t_vector *direction)
+{
+	*origin = (t_point){0, 0, 0};
+	*direction = normalize(two_points_vect(*origin, pixel_camera));
+	*origin = axes_sum(*origin, data->camera.pos);
+	*direction = rotate_vector(*direction, data->camera.orientation);
+}
+
 int	build_ray(t_data *data, t_point pixel_camera)
 {
 	t_point		origin;
@@ -245,19 +326,29 @@ int	build_ray(t_data *data, t_point pixel_camera)
 	t_color		color;
 	double		t;
 
-	origin = (t_point){0, 0, 0};
-	direction = normalize(two_points_vect(origin, pixel_camera));
-	origin = axes_sum(origin, data->camera.pos);
-	direction = rotate_vector(direction, data->camera.orientation);
+	get_camera_ray(data, pixel_camera, &origin, &direction);
 	obj = first_obj_hit(data, origin, direction, &t);
 	if (obj == NULL)
 		return (create_trgb(0, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B));
 	color = mult_color_ratio(data->ambient.color, data->ambient.ratio);
-	color = sum_colors(color, mult_color_ratio(data->light.color,
-				light_intensity(data, direction,
-					ray_point(origin, direction, t), obj)));
+	color = sum_colors(color,
+						mult_color_ratio(data->light.color,
+						light_intensity(data, direction,
+						ray_point(origin, direction, t), obj)));
 	color = mult_colors(color, obj->color);
 	return (create_trgb(0, color.r, color.g, color.b));
+}
+
+t_point	get_pixel_camera(double fov, int x, int y)
+{
+	double	pixel_camera_x;
+	double	pixel_camera_y;
+
+	pixel_camera_x = (2 * (x + 0.5) / (double)WIDTH - 1)
+		* tan(fov / 2) * WIDTH / HEIGHT;
+	pixel_camera_y = (1 - 2 * (y + 0.5) / (double)HEIGHT)
+		* tan(fov / 2);
+	return ((t_point){pixel_camera_x, pixel_camera_y, 1});
 }
 
 void	build_image(t_data *data)
@@ -265,8 +356,7 @@ void	build_image(t_data *data)
 	int		color;
 	int		x;
 	int		y;
-	double	pixel_camera_x;
-	double	pixel_camera_y;
+	t_point	pixel_camera;
 
 	y = 0;
 	while (y < HEIGHT)
@@ -274,12 +364,8 @@ void	build_image(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			pixel_camera_x = (2 * (x + 0.5) / (double)WIDTH - 1)
-				* tan(data->camera.fov / 2) * WIDTH / HEIGHT;
-			pixel_camera_y = (1 - 2 * (y + 0.5) / (double)HEIGHT)
-				* tan(data->camera.fov / 2);
-			color = build_ray(data,
-					(t_point){pixel_camera_x, pixel_camera_y, 1});
+			pixel_camera = get_pixel_camera(data->camera.fov, x, y);
+			color = build_ray(data, pixel_camera);
 			my_mlx_pixel_put(&data->mlx_struct->img, x, y, color);
 			x++;
 		}
@@ -338,6 +424,8 @@ t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 	camera = find_elem(elem, C);
 	light = find_elem(elem, L);
 	ambient = find_elem(elem, A);
+	data.selected_object = NULL;
+	data.option = NOTHING;
 	data.light.pos = light.pos;
 	data.light.ratio = light.ratio;
 	data.light.color = light.color;
@@ -348,6 +436,86 @@ t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 	data.camera.fov = camera.fov * M_PI / 180;
 	build_objects(elem, &data);
 	return (data);
+}
+
+void display_object_info(t_data *data)
+{
+	char	*str;
+
+	if (data->selected_object->type == pl)
+		str = "plane";
+	else if (data->selected_object->type == sp)
+		str = "sphere";
+	else if (data->selected_object->type == cy)
+		str = "cylinder";
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 59, 14, 0x00FFFFFF, str);
+}
+
+void display_object_position(t_data *data)
+{
+	char	*str;
+
+	str = ft_itoa(data->selected_object->pos.x);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 150, 14, 0x00FFFFFF, str);
+	free(str);
+	str = ft_itoa(data->selected_object->pos.y);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 200, 14, 0x00FFFFFF, str);
+	free(str);
+	str = ft_itoa(data->selected_object->pos.z);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 250, 14, 0x00FFFFFF, str);
+	free(str);
+}
+
+void display_controls(t_data *data)
+{
+	char	*str1;
+	char	*str2;
+	char	*str3;
+
+	str3 = "";
+	if (data->selected_object->type == sp)
+	{
+		data->option = D;
+		str1 = "+/- to resize diameter";
+		str2 = "arrows to move the sphere";
+	}
+	else if (data->selected_object->type == pl)
+	{
+		str1 = "arrows to move the plane";
+		str2 = "x/y/z +/- to rotate the plane";
+	}
+	else if (data->selected_object->type == cy)
+	{
+		str1 = "d/h +/- to resize diameter/height";
+		str2 = "arrows to move the cylinder";
+		str3 = "x/y/z +/- to rotate the cylinder";
+	}
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 10, 40, 0x00FFFFFF, str1);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 10, 60, 0x00FFFFFF, str2);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 10, 80, 0x00FFFFFF, str3);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 7, 100, 0x00FFFFFF, "q to unselect");
+}
+
+int	mouse_hook(int keycode, int x, int y, t_data *data)
+{
+	t_point		pixel_camera;
+	t_point		origin;
+	t_vector	direction;
+
+	if (keycode != 1)
+		return (0);
+	data->option = NOTHING;
+	mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
+	pixel_camera = get_pixel_camera(data->camera.fov, x, y);
+	get_camera_ray(data, pixel_camera, &origin, &direction);
+	data->selected_object = first_obj_hit(data, origin, direction, &(double){0});
+	if (data->selected_object == NULL)
+		return (0);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 7, 14, 0x00FFFFFF, "Selected");
+	display_object_info(data);
+	display_object_position(data);
+	display_controls(data);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -367,6 +535,7 @@ int	main(int argc, char **argv)
 		mlx_struct.img.img, 0, 0);
 	mlx_hook(mlx_struct.mlx_win, 2, 1L << 0, key_down, &data);
 	mlx_hook(mlx_struct.mlx_win, 17, 0L, esc, &data);
+	mlx_mouse_hook(mlx_struct.mlx_win, mouse_hook, &data);
 	mlx_loop(mlx_struct.mlx);
 	return (0);
 }
