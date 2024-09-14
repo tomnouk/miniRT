@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 16:22:55 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/14 18:30:03 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 19:01:02 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,15 +278,15 @@ t_vector	rotate_vector(t_vector v, t_vector direction)
 	axis = normalize(axis);
 	cos_angle = cos(angle);
 	sin_angle = sin(angle);
-	rotated.x = (cos_angle + (1 - cos_angle) * axis.x * axis.x) * v.x
+	rotated.x = (axis.x * axis.x + (1 - axis.x * axis.x) * cos_angle) * v.x
 		+ ((1 - cos_angle) * axis.x * axis.y - sin_angle * axis.z) * v.y
 		+ ((1 - cos_angle) * axis.x * axis.z + sin_angle * axis.y) * v.z;
 	rotated.y = ((1 - cos_angle) * axis.x * axis.y + sin_angle * axis.z) * v.x
-		+ (cos_angle + (1 - cos_angle) * axis.y * axis.y) * v.y
+		+ (axis.y * axis.y + (1 - axis.y * axis.y) * cos_angle) * v.y
 		+ ((1 - cos_angle) * axis.y * axis.z - sin_angle * axis.x) * v.z;
 	rotated.z = ((1 - cos_angle) * axis.x * axis.z - sin_angle * axis.y) * v.x
 		+ ((1 - cos_angle) * axis.y * axis.z + sin_angle * axis.x) * v.y
-		+ (cos_angle + (1 - cos_angle) * axis.z * axis.z) * v.z;
+		+ (axis.z * axis.z + (1 - axis.z * axis.z) * cos_angle) * v.z;
 	return (rotated);
 }
 
