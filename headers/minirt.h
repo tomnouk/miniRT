@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/13 18:07:04 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/09/14 02:00:49 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@
 # define ERROR_CYLINDER_COLOR "Error\nInvalid cylinder color\n"
 # define ER_CYLINDER_COLOR_VALUE "Error\nInvalid cylinder color value\n"
 
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 1080
+# define HEIGHT 720
 # define BACKGROUND_R 255
 # define BACKGROUND_G 255
 # define BACKGROUND_B 255
@@ -107,6 +107,7 @@ typedef struct s_elem
 	double		ratio;
 	double		diameter;
 	double		height;
+	double		shininess;
 }				t_elem;
 
 typedef struct s_img
@@ -154,6 +155,7 @@ typedef struct s_object
 	double		diameter;
 	double		height;
 	t_color		color;
+	double		shininess;
 }	t_object;
 
 typedef struct t_data
@@ -192,7 +194,11 @@ t_vector		normalize(t_vector v);
 t_vector		two_points_vect(t_point a, t_point b);
 t_vector		axes_sum(t_axes a, t_axes b);
 t_vector		axes_sub(t_axes a, t_axes b);
-double			dot_product(t_vector a, t_vector b);
 t_vector		cross_product(t_vector a, t_vector b);
+t_vector		vect_mult(t_vector v, double a);
+t_point			ray_point(t_point origin, t_vector direction, double t);
+t_vector		reflect_ray(t_vector ray, t_vector normal);
+double			dot_product(t_vector a, t_vector b);
+double			vect_length2(t_vector v);
 
 #endif

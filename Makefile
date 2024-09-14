@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+         #
+#    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/11 17:13:26 by aeid             ###   ########.fr        #
+#    Updated: 2024/09/13 21:09:12 by samy_bravy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,32 +52,32 @@ RM = rm -f
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		@echo "\e[0;35m$< ----> $@\e[0;m"
-		@$(MAKE_LIBFT)
-		@$(MAKE_MLX)
+		@echo "\e[0;32mCompiling...\e[0;m"
+		@$(MAKE_LIBFT) > /dev/null
+		@$(MAKE_MLX) > /dev/null
 		@$(CC) $(CC_FLAGS) $(OBJS) -Lmlx_linux ./libft/libft.a ./minilibx-linux/libmlx.a -lXext -lX11 -lm -lz -o $(NAME)
 		@echo "\e[0;32mCompleted! 🤠\e[0;m"
 
 bonus: $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJS_BONUS)
-		@echo "\e[0;35m$< ----> $@\e[0;m"
-		@$(MAKE_LIBFT) 
-		@$(MAKE_MLX)
+		@echo "\e[0;33mCompiling...\e[0;m"
+		@$(MAKE_LIBFT) > /dev/null
+		@$(MAKE_MLX) > /dev/null
 		@$(CC) $(CC_FLAGS) $(OBJS_BONUS) -Lmlx_linux ./libft/libft.a ./minilibx-linux/libmlx.a -lXext -lX11 -lm -lz -o $(NAME_BONUS)
 		@echo "\e[0;32mCompleted! 🤠\e[0;m"
 		
 clean:
 		@echo "Cleaning up..."
-		@$(MAKE) clean -C ./libft
+		@$(MAKE) clean -C ./libft > /dev/null
 		$(RM) $(OBJS_BONUS) $(OBJS)
 		@echo "\e[0;31mCleaned! 🧹\e[0;m"
 
 fclean:
 		@echo "\e[0;32mWait ...\e[0;m"
-		@$(MAKE) fclean -C ./libft
+		@$(MAKE) fclean -C ./libft > /dev/null
 		$(RM) $(OBJS) $(OBJS_BONUS) $(NAME) $(NAME_BONUS)
-		@$(MAKE) clean -C ./minilibx-linux
+		@$(MAKE) clean -C ./minilibx-linux > /dev/null
 		@echo "\e[0;32mCleaned! 🧹\e[0;m"
 
 re: fclean all

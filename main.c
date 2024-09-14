@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:01:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/13 18:25:59 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/09/14 01:48:23 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,36 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+}
+
+t_color	mult_colors(t_color a, t_color b)
+{
+	t_color	res;
+
+	res.r = a.r * b.r / 255;
+	res.g = a.g * b.g / 255;
+	res.b = a.b * b.b / 255;
+	return (res);
+}
+
+t_color	sum_colors(t_color a, t_color b)
+{
+	t_color	res;
+
+	res.r = a.r + b.r;
+	res.g = a.g + b.g;
+	res.b = a.b + b.b;
+	return (res);
+}
+
+t_color	mult_color_ratio(t_color a, double ratio)
+{
+	t_color	res;
+
+	res.r = a.r * ratio;
+	res.g = a.g * ratio;
+	res.b = a.b * ratio;
+	return (res);
 }
 
 void	minilibx_init(t_minilibx *smlx, t_elem *elem)
@@ -87,41 +117,66 @@ t_vector	rotate_vector(t_vector v, t_vector orientation)
 {
 	t_vector	res;
 
-	res.x = (1 - orientation.y * orientation.y * (1 - orientation.z)) * v.x
-		- orientation.x * orientation.y * (1 - orientation.z) * v.y
-		+ orientation.x * v.z;
-	res.y = -orientation.x * orientation.y * (1 - orientation.z) * v.x
-		+ (1 - orientation.x * orientation.x * (1 - orientation.z)) * v.y
-		+ orientation.y * v.z;
-	res.z = -orientation.x * v.x
-		- orientation.y * v.y
-		+ orientation.z * v.z;
+	(void)orientation;
+	res = v;
 	return (res);
 }
 
 bool	sphere_intersection(t_point origin, t_vector direction,
 	t_object *sphere, double *t)
 {
-	
+	t_vector	co;
+	double		b;
+	double		c;
+	double		delta;
+	double		delta_sqrt;
+
+	co = two_points_vect(sphere->pos, origin);
+	b = 2 * dot_product(direction, co);
+	c = vect_length2(co) - sphere->diameter * sphere->diameter / 4;
+	delta = b * b - 4 * c;
+	if (delta < 0)
+		return (false);
+	delta_sqrt = sqrt(delta);
+	*t = (-b - delta_sqrt) / 2;
+	if (*t <= 1.0e-6)
+		*t = (-b + delta_sqrt) / 2;
+	if (*t <= 1.0e-6)
+		return (false);
+	return (true);
 }
 
 bool	plane_intersection(t_point origin, t_vector direction,
 	t_object *plane, double *t)
 {
-	
+	t_vector	p_o;
+	double		d_dot_n;
+
+	p_o = two_points_vect(plane->pos, origin);
+	d_dot_n = dot_product(direction, plane->orientation);
+	if (d_dot_n == 0)
+		return (false);
+	*t = -dot_product(p_o, plane->orientation) / d_dot_n;
+	if (*t <= 1.0e-6)
+		return (false);
+	return (true);
 }
 
 bool	cylinder_intersection(t_point origin, t_vector direction,
 	t_object *cylinder, double *t)
 {
-	
+	(void)origin;
+	(void)direction;
+	(void)cylinder;
+	(void)t;
+	return (false);
 }
 
-t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction)
+t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
+	double *t)
 {
 	t_object	*first_obj;
 	double		t_min;
-	double		t;
 	int			i;
 
 	first_obj = NULL;
@@ -129,15 +184,15 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction)
 	while (i < data->num_of_objects)
 	{
 		if ((data->objects[i].type == sp && sphere_intersection(origin,
-					direction, &data->objects[i], &t))
+					direction, &data->objects[i], t))
 			|| (data->objects[i].type == pl && plane_intersection(origin,
-					direction, &data->objects[i], &t))
+					direction, &data->objects[i], t))
 			|| (data->objects[i].type == cy && cylinder_intersection(origin,
-					direction, &data->objects[i], &t)))
+					direction, &data->objects[i], t)))
 		{
-			if (first_obj == NULL || t < t_min)
+			if (first_obj == NULL || *t < t_min)
 			{
-				t_min = t;
+				t_min = *t;
 				first_obj = &data->objects[i];
 			}
 		}
@@ -146,20 +201,63 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction)
 	return (first_obj);
 }
 
+t_vector	calculate_cylinder_normal(t_object *cylinder, t_point p)
+{
+	(void)cylinder;
+	(void)p;
+	return ((t_vector){0, 0, 0});
+}
+
+double	light_intensity(t_data *data, t_vector direction, t_point p,
+	t_object *obj)
+{
+	t_vector	normal;
+	t_vector	p_to_light;
+	double		intensity;
+
+	if (obj->type == pl)
+		normal = obj->orientation;
+	else if (obj->type == sp)
+		normal = normalize(two_points_vect(obj->pos, p));
+	else if (obj->type == cy)
+		normal = calculate_cylinder_normal(obj, p);
+	p_to_light = normalize(two_points_vect(p, data->light.pos));
+	if (first_obj_hit(data, p, p_to_light, &(double){0}) != NULL)
+		return (0);
+	intensity = dot_product(normal, p_to_light);
+	if (intensity < 0)
+		intensity = 0;
+	if (obj->shininess > 0)
+	{
+		intensity += pow(dot_product(direction,
+					reflect_ray(p_to_light, normal)), obj->shininess);
+		if (intensity < 0)
+			intensity = 0;
+	}
+	return (intensity * data->light.ratio);
+}
+
 int	build_ray(t_data *data, t_point pixel_camera)
 {
 	t_point		origin;
 	t_vector	direction;
 	t_object	*obj;
+	t_color		color;
+	double		t;
 
 	origin = (t_point){0, 0, 0};
 	direction = normalize(two_points_vect(origin, pixel_camera));
 	origin = axes_sum(origin, data->camera.pos);
 	direction = rotate_vector(direction, data->camera.orientation);
-	obj = first_obj_hit(data, origin, direction);
+	obj = first_obj_hit(data, origin, direction, &t);
 	if (obj == NULL)
 		return (create_trgb(0, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B));
-	return (create_trgb(0, obj->color.r, obj->color.g, obj->color.b));
+	color = mult_color_ratio(data->ambient.color, data->ambient.ratio);
+	color = sum_colors(color, mult_color_ratio(data->light.color,
+				light_intensity(data, direction,
+					ray_point(origin, direction, t), obj)));
+	color = mult_colors(color, obj->color);
+	return (create_trgb(0, color.r, color.g, color.b));
 }
 
 void	build_image(t_data *data)
@@ -176,10 +274,10 @@ void	build_image(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			pixel_camera_x = (2 * (2 * (x + 0.5) / WIDTH - 1) - 1)
-				* WIDTH / (double)HEIGHT * tan(data->camera.fov / 2.0);
-			pixel_camera_y = (1 - 2 * (2 * (y + 0.5) / HEIGHT - 1))
-				* tan(data->camera.fov / 2.0);
+			pixel_camera_x = (2 * (x + 0.5) / (double)WIDTH - 1)
+				* tan(data->camera.fov / 2) * WIDTH / HEIGHT;
+			pixel_camera_y = (1 - 2 * (y + 0.5) / (double)HEIGHT)
+				* tan(data->camera.fov / 2);
 			color = build_ray(data,
 					(t_point){pixel_camera_x, pixel_camera_y, 1});
 			my_mlx_pixel_put(&data->mlx_struct->img, x, y, color);
@@ -212,21 +310,42 @@ void	build_objects(t_elem *elem, t_data *data)
 			data->objects[i].diameter = elem->diameter;
 			data->objects[i].height = elem->height;
 			data->objects[i].color = elem->color;
-			i++;
+			data->objects[i++].shininess = 40;
 		}
 		elem++;
 	}
 }
 
+t_elem	find_elem(t_elem *elem, t_type type)
+{
+	while (elem->type != NONE)
+	{
+		if (elem->type == type)
+			return (*elem);
+		elem++;
+	}
+	return (*elem);
+}
+
 t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 {
 	t_data	data;
+	t_elem	camera;
+	t_elem	light;
+	t_elem	ambient;
 
 	data.mlx_struct = mlx_struct;
-	data.light = (t_light){elem->pos, elem->ratio, elem->color};
-	data.ambient = (t_amblight){elem->ratio, elem->color};
-	data.camera = (t_camera){elem->pos, elem->orientation,
-		(double)elem->fov * M_PI / 180};
+	camera = find_elem(elem, C);
+	light = find_elem(elem, L);
+	ambient = find_elem(elem, A);
+	data.light.pos = light.pos;
+	data.light.ratio = light.ratio;
+	data.light.color = light.color;
+	data.ambient.ratio = ambient.ratio;
+	data.ambient.color = ambient.color;
+	data.camera.pos = camera.pos;
+	data.camera.orientation = camera.orientation;
+	data.camera.fov = camera.fov * M_PI / 180;
 	build_objects(elem, &data);
 	return (data);
 }

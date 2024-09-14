@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 15:50:54 by sdell-er          #+#    #+#             */
-/*   Updated: 2024/09/12 23:13:26 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 01:26:23 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,9 @@ t_vector	two_points_vect(t_point a, t_point b)
 t_vector	reflect_ray(t_vector ray, t_vector normal)
 {
 	return (axes_sub(ray, vect_mult(normal, 2 * dot_product(ray, normal))));
+}
+
+t_point	ray_point(t_point origin, t_vector direction, double t)
+{
+	return (axes_sum(origin, vect_mult(direction, t)));
 }
