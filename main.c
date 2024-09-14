@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 16:01:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/14 13:27:19 by samy_bravy       ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   main.c											 :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: samy_bravy <samy_bravy@student.42.fr>	  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2024/09/14 15:27:47 by samy_bravy		#+#	#+#			 */
+/*   Updated: 2024/09/14 15:53:39 by samy_bravy	   ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "headers/minirt.h"
@@ -87,6 +87,8 @@ void	minilibx_init(t_minilibx *smlx, t_elem *elem)
 
 int	esc(t_data *data)
 {
+	if (data->changing_properties)
+		return (0);
 	mlx_destroy_image(data->mlx_struct->mlx, data->mlx_struct->img.img);
 	mlx_destroy_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win);
 	mlx_destroy_display(data->mlx_struct->mlx);
@@ -95,83 +97,160 @@ int	esc(t_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-int	key_down(int keycode, t_data *data)
+static void	before_digit(char *nptr, int *n, int *i)
 {
-	if (keycode == XK_Escape)
-		esc(data);
-	if (keycode == XK_q)
+	while ((nptr[*n] >= 9 && nptr[*n] <= 13) || nptr[*n] == ' ')
+		*n += 1;
+	if (nptr[*n] == '-' || nptr[*n] == '+')
 	{
-		data->selected_object = NULL;
-		data->option = NOTHING;
-		mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
-		return (0);
+		if (nptr[*n] == '-')
+			*i *= -1;
+		*n += 1;
 	}
-	else if (keycode == XK_d && data->selected_object->type == sp && data->option == NOTHING)
+}
+
+double	my_ft_atof(char *nptr)
+{
+	int		i;
+	int		n;
+	int		dot;
+	double	res;
+
+	n = 0;
+	i = 1;
+	res = 0;
+	before_digit(nptr, &n, &i);
+	dot = 0;
+	while ((nptr[n] >= '0' && nptr[n] <= '9') || nptr[n] == '.')
 	{
-		data->option = D;
-		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected diameter");
-		return (0);
+		if (nptr[n] == '.')
+			dot = 1;
+		else if (!dot)
+			res = res * 10 + (nptr[n] - '0');
+		else
+		{
+			res += (nptr[n] - '0') / pow(10, dot);
+			dot++;
+		}
+		n++;
 	}
-	else if (keycode == XK_h && data->selected_object->type == cy && data->option == NOTHING)
+	return (res * i);
+}
+
+void	prompt_and_set(char *prompt, double *value)
+{
+	char	*str;
+
+	while (true)
 	{
-		data->option = H;
-		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected height");
-		return (0);
+		printf("%s\n", prompt);
+		str = get_next_line(STDIN_FILENO);
+		if (str)
+		{
+			*value = my_ft_atof(str);
+			free(str);
+			break ;
+		}
 	}
-	else if (keycode == XK_x && data->option == NOTHING)
+	get_next_line(-1);
+}
+
+void	set_light_position(t_data *data)
+{
+	prompt_and_set("Enter light position x", &data->light.pos.x);
+	prompt_and_set("Enter light position y", &data->light.pos.y);
+	prompt_and_set("Enter light position z", &data->light.pos.z);
+}
+
+void	set_camera_position(t_data *data)
+{
+	prompt_and_set("Enter camera position x", &data->camera.pos.x);
+	prompt_and_set("Enter camera position y", &data->camera.pos.y);
+	prompt_and_set("Enter camera position z", &data->camera.pos.z);
+}
+
+void	set_camera_orientation(t_data *data)
+{
+	prompt_and_set("Enter camera orientation x", &data->camera.orientation.x);
+	prompt_and_set("Enter camera orientation y", &data->camera.orientation.y);
+	prompt_and_set("Enter camera orientation z", &data->camera.orientation.z);
+}
+
+char	*get_valid_input_ambient(void)
+{
+	char	*str;
+
+	while (true)
 	{
-		data->option = X;
-		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected x");
-		return (0);
+		printf("Press L to move light\n");
+		printf("Press C to change camera properties\n");
+		printf("Press Q to quit\n");
+		str = get_next_line(STDIN_FILENO);
+		if (str && (!ft_strcmp(str, "L\n")
+				|| !ft_strcmp(str, "C\n")
+				|| !ft_strcmp(str, "Q\n")))
+			return (str);
+		free(str);
 	}
-	else if (keycode == XK_y && data->option == NOTHING)
+	get_next_line(-1);
+}
+
+void	change_plane_properties(t_object *plane)
+{
+	prompt_and_set("Enter plane position x", &plane->pos.x);
+	prompt_and_set("Enter plane position y", &plane->pos.y);
+	prompt_and_set("Enter plane position z", &plane->pos.z);
+	prompt_and_set("Enter plane normal vector x", &plane->orientation.x);
+	prompt_and_set("Enter plane normal vector y", &plane->orientation.y);
+	prompt_and_set("Enter plane normal vector z", &plane->orientation.z);
+}
+
+void	change_sphere_properties(t_object *sphere)
+{
+	prompt_and_set("Enter sphere center x", &sphere->pos.x);
+	prompt_and_set("Enter sphere center y", &sphere->pos.y);
+	prompt_and_set("Enter sphere center z", &sphere->pos.z);
+	prompt_and_set("Enter sphere diameter", &sphere->diameter);
+}
+
+void	change_cylinder_properties(t_object *cylinder)
+{
+	prompt_and_set("Enter cylinder center x", &cylinder->pos.x);
+	prompt_and_set("Enter cylinder center y", &cylinder->pos.y);
+	prompt_and_set("Enter cylinder center z", &cylinder->pos.z);
+	prompt_and_set("Enter cylinder orientation vector x",
+		&cylinder->orientation.x);
+	prompt_and_set("Enter cylinder orientation vector y",
+		&cylinder->orientation.y);
+	prompt_and_set("Enter cylinder orientation vector z",
+		&cylinder->orientation.z);
+	prompt_and_set("Enter cylinder diameter", &cylinder->diameter);
+	prompt_and_set("Enter cylinder height", &cylinder->height);
+}
+
+void	change_object_properties(t_data *data)
+{
+	if (data->selected_obj->type == pl)
+		change_plane_properties(data->selected_obj);
+	else if (data->selected_obj->type == sp)
+		change_sphere_properties(data->selected_obj);
+	else if (data->selected_obj->type == cy)
+		change_cylinder_properties(data->selected_obj);
+}
+
+void	change_ambient_properties(t_data *data)
+{
+	char	*str;
+
+	str = get_valid_input_ambient();
+	if (!ft_strcmp(str, "L\n"))
+		set_light_position(data);
+	else if (!ft_strcmp(str, "C\n"))
 	{
-		data->option = Y;
-		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected y");
-		return (0);
+		set_camera_position(data);
+		set_camera_orientation(data);
 	}
-	else if (keycode == XK_z && data->option == NOTHING)
-	{
-		data->option = Z;
-		mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 400, 14, 0x00FFFFFF, "Selected z");
-		return (0);
-	}
-	else if (keycode == XK_plus)
-	{
-		if (data->option == D)
-			data->selected_object->diameter *= 1.1;
-		if (data->option == H)
-			data->selected_object->height *= 1.1;
-		if (data->option == X)
-			data->selected_object->orientation.x += 1;
-		if (data->option == Y)
-			data->selected_object->orientation.y += 1;
-		if (data->option == Z)
-			data->selected_object->orientation.z += 1;
-	}
-	else if (keycode == XK_minus)
-	{
-		if (data->option == D)
-			data->selected_object->diameter /= 1.1;
-		if (data->option == H)
-			data->selected_object->height /= 1.1;
-		if (data->option == X)
-			data->selected_object->orientation.x -= 1;
-		if (data->option == Y)
-			data->selected_object->orientation.y -= 1;
-		if (data->option == Z)
-			data->selected_object->orientation.z -= 1;
-	}
-	else if (keycode == XK_Up && data->selected_object != NULL)
-		data->selected_object->pos.y += 1;
-	else if (keycode == XK_Down && data->selected_object != NULL)
-		data->selected_object->pos.y -= 1;
-	else if (keycode == XK_Left && data->selected_object != NULL)
-		data->selected_object->pos.x -= 1;
-	else if (keycode == XK_Right && data->selected_object != NULL)
-		data->selected_object->pos.x += 1;
-	mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
-	return (0);
+	free(str);
 }
 
 t_elem	*get_type_element(t_elem *elem, t_type type)
@@ -332,9 +411,9 @@ int	build_ray(t_data *data, t_point pixel_camera)
 		return (create_trgb(0, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B));
 	color = mult_color_ratio(data->ambient.color, data->ambient.ratio);
 	color = sum_colors(color,
-						mult_color_ratio(data->light.color,
-						light_intensity(data, direction,
-						ray_point(origin, direction, t), obj)));
+			mult_color_ratio(data->light.color,
+				light_intensity(data, direction,
+					ray_point(origin, direction, t), obj)));
 	color = mult_colors(color, obj->color);
 	return (create_trgb(0, color.r, color.g, color.b));
 }
@@ -424,8 +503,6 @@ t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 	camera = find_elem(elem, C);
 	light = find_elem(elem, L);
 	ambient = find_elem(elem, A);
-	data.selected_object = NULL;
-	data.option = NOTHING;
 	data.light.pos = light.pos;
 	data.light.ratio = light.ratio;
 	data.light.color = light.color;
@@ -435,65 +512,105 @@ t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 	data.camera.orientation = camera.orientation;
 	data.camera.fov = camera.fov * M_PI / 180;
 	build_objects(elem, &data);
+	data.selected_obj = NULL;
+	data.changing_properties = false;
 	return (data);
 }
 
-void display_object_info(t_data *data)
+void	display_axes(t_data *data, t_axes axes, char *label, int y_offset)
 {
 	char	*str;
 
-	if (data->selected_object->type == pl)
-		str = "plane";
-	else if (data->selected_object->type == sp)
-		str = "sphere";
-	else if (data->selected_object->type == cy)
-		str = "cylinder";
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 59, 14, 0x00FFFFFF, str);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, y_offset, 0x00FFFFFF, label);
+	str = ft_itoa(axes.x);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		150, y_offset, 0x00FFFFFF, str);
+	free(str);
+	str = ft_itoa(axes.y);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		200, y_offset, 0x00FFFFFF, str);
+	free(str);
+	str = ft_itoa(axes.z);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		250, y_offset, 0x00FFFFFF, str);
+	free(str);
 }
 
-void display_object_position(t_data *data)
+void	display_ambient_properties(t_data *data)
+{
+	display_axes(data, data->light.pos, "Light position:", 14);
+	display_axes(data, data->camera.pos, "Camera position:", 33);
+	display_axes(data, data->camera.orientation, "Camera orientation:", 49);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 73, 0x00FFFFFF, "Press C to change properties");
+}
+
+void	display_sphere_properties(t_data *data, t_object *obj)
 {
 	char	*str;
 
-	str = ft_itoa(data->selected_object->pos.x);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 150, 14, 0x00FFFFFF, str);
-	free(str);
-	str = ft_itoa(data->selected_object->pos.y);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 200, 14, 0x00FFFFFF, str);
-	free(str);
-	str = ft_itoa(data->selected_object->pos.z);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 250, 14, 0x00FFFFFF, str);
+	display_axes(data, obj->pos, "Center:", 35);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 50, 0x00FFFFFF, "Diameter:");
+	str = ft_itoa(obj->diameter);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		150, 50, 0x00FFFFFF, str);
 	free(str);
 }
 
-void display_controls(t_data *data)
+void	display_plane_properties(t_data *data, t_object *obj)
 {
-	char	*str1;
-	char	*str2;
-	char	*str3;
+	display_axes(data, obj->pos, "Point:", 35);
+	display_axes(data, obj->orientation, "Normal:", 50);
+}
 
-	str3 = "";
-	if (data->selected_object->type == sp)
+void	display_cylinder_properties(t_data *data, t_object *obj)
+{
+	char	*str;
+
+	display_axes(data, obj->pos, "Center:", 35);
+	display_axes(data, obj->orientation, "Axis:", 50);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 65, 0x00FFFFFF, "Diameter:");
+	str = ft_itoa(obj->diameter);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		150, 65, 0x00FFFFFF, str);
+	free(str);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 80, 0x00FFFFFF, "Height:");
+	str = ft_itoa(obj->height);
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		150, 80, 0x00FFFFFF, str);
+	free(str);
+}
+
+void	display_object_properties(t_data *data, t_object *obj)
+{
+	char	*str;
+
+	if (obj->type == pl)
+		str = "Plane";
+	else if (obj->type == sp)
+		str = "Sphere";
+	else if (obj->type == cy)
+		str = "Cylinder";
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 14, 0x00FFFFFF, str);
+	if (obj->type == sp)
+		display_sphere_properties(data, obj);
+	else if (obj->type == pl)
+		display_plane_properties(data, obj);
+	else if (obj->type == cy)
 	{
-		data->option = D;
-		str1 = "+/- to resize diameter";
-		str2 = "arrows to move the sphere";
+		display_cylinder_properties(data, obj);
 	}
-	else if (data->selected_object->type == pl)
-	{
-		str1 = "arrows to move the plane";
-		str2 = "x/y/z +/- to rotate the plane";
-	}
-	else if (data->selected_object->type == cy)
-	{
-		str1 = "d/h +/- to resize diameter/height";
-		str2 = "arrows to move the cylinder";
-		str3 = "x/y/z +/- to rotate the cylinder";
-	}
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 10, 40, 0x00FFFFFF, str1);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 10, 60, 0x00FFFFFF, str2);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 10, 80, 0x00FFFFFF, str3);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 7, 100, 0x00FFFFFF, "q to unselect");
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 74 + 31 * (obj->type == cy), 0x00FFFFFF,
+		"Press C to change properties");
+	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		7, 90 + 31 * (obj->type == cy), 0x00FFFFFF,
+		"Press Q to unselct object");
 }
 
 int	mouse_hook(int keycode, int x, int y, t_data *data)
@@ -502,19 +619,44 @@ int	mouse_hook(int keycode, int x, int y, t_data *data)
 	t_point		origin;
 	t_vector	direction;
 
-	if (keycode != 1)
+	if (keycode != 1 || data->changing_properties == true)
 		return (0);
-	data->option = NOTHING;
-	mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
+	mlx_put_image_to_window(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
+		data->mlx_struct->img.img, 0, 0);
 	pixel_camera = get_pixel_camera(data->camera.fov, x, y);
 	get_camera_ray(data, pixel_camera, &origin, &direction);
-	data->selected_object = first_obj_hit(data, origin, direction, &(double){0});
-	if (data->selected_object == NULL)
+	data->selected_obj = first_obj_hit(data, origin, direction, &(double){0});
+	if (data->selected_obj == NULL)
+	{
+		display_ambient_properties(data);
 		return (0);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win, 7, 14, 0x00FFFFFF, "Selected");
-	display_object_info(data);
-	display_object_position(data);
-	display_controls(data);
+	}
+	display_object_properties(data, data->selected_obj);
+	return (0);
+}
+
+int	key_down(int keycode, t_data *data)
+{
+	if (data->changing_properties)
+		return (0);
+	if (keycode == XK_Escape)
+		esc(data);
+	if (keycode == XK_c)
+	{
+		data->changing_properties = true;
+		if (data->selected_obj == NULL)
+			change_ambient_properties(data);
+		else
+			change_object_properties(data);
+	}
+	else if (keycode != XK_q)
+		return (0);
+	build_image(data);
+	mlx_put_image_to_window(data->mlx_struct->mlx,
+		data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
+	display_ambient_properties(data);
+	data->selected_obj = NULL;
+	data->changing_properties = false;
 	return (0);
 }
 
@@ -536,6 +678,7 @@ int	main(int argc, char **argv)
 	mlx_hook(mlx_struct.mlx_win, 2, 1L << 0, key_down, &data);
 	mlx_hook(mlx_struct.mlx_win, 17, 0L, esc, &data);
 	mlx_mouse_hook(mlx_struct.mlx_win, mouse_hook, &data);
+	display_ambient_properties(&data);
 	mlx_loop(mlx_struct.mlx);
 	return (0);
 }

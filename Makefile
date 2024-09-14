@@ -6,7 +6,7 @@
 #    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/13 21:09:12 by samy_bravy       ###   ########.fr        #
+#    Updated: 2024/09/14 13:37:55 by samy_bravy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ CC = cc -g
 
 CFLAGS = -Wall -Wextra -Werror
 
-NAME = minirt
+NAME = miniRT
 
 NAME_BONUS = minirt_bonus
 

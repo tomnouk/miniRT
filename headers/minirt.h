@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/14 13:27:14 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 14:04:49 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@
 
 # define WIDTH 1080
 # define HEIGHT 720
-# define BACKGROUND_R 255
-# define BACKGROUND_G 255
-# define BACKGROUND_B 255
+# define BACKGROUND_R 0
+# define BACKGROUND_G 0
+# define BACKGROUND_B 0
 
 typedef enum type
 {
@@ -158,16 +158,6 @@ typedef struct s_object
 	double		shininess;
 }	t_object;
 
-typedef enum e_option
-{
-	NOTHING,
-	X,
-	Y,
-	Z,
-	D,
-	H
-}	t_option;
-
 typedef struct t_data
 {
 	t_minilibx	*mlx_struct;
@@ -176,8 +166,8 @@ typedef struct t_data
 	t_camera	camera;
 	t_object	*objects;
 	int			num_of_objects;
-	t_object	*selected_object;
-	t_option	option;
+	t_object	*selected_obj;
+	bool		changing_properties;
 }	t_data;
 
 void			parsing(t_elem **elem, char *file, int argc);
