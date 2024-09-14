@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 15:50:54 by sdell-er          #+#    #+#             */
-/*   Updated: 2024/09/14 01:26:23 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 16:50:35 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ double	vect_length(t_vector v)
 	return (sqrt(vect_length2(v)));
 }
 
-double	angle(t_vector a, t_vector b)
+double	vectors_angle(t_vector a, t_vector b)
 {
 	double	len_a;
 	double	len_b;

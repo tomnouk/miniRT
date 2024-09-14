@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/14 14:04:49 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 16:50:44 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,8 @@ t_vector		vect_mult(t_vector v, double a);
 t_point			ray_point(t_point origin, t_vector direction, double t);
 t_vector		reflect_ray(t_vector ray, t_vector normal);
 double			dot_product(t_vector a, t_vector b);
+double			vect_length(t_vector v);
 double			vect_length2(t_vector v);
+double			vectors_angle(t_vector a, t_vector b);
 
 #endif

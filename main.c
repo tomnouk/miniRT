@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   main.c											 :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: samy_bravy <samy_bravy@student.42.fr>	  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2024/09/14 15:27:47 by samy_bravy		#+#	#+#			 */
-/*   Updated: 2024/09/14 15:53:39 by samy_bravy	   ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/14 16:22:55 by samy_bravy        #+#    #+#             */
+/*   Updated: 2024/09/14 18:30:03 by samy_bravy       ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minirt.h"
@@ -147,6 +147,7 @@ void	prompt_and_set(char *prompt, double *value)
 		str = get_next_line(STDIN_FILENO);
 		if (str)
 		{
+			str[strlen(str) - 1] = '\0';
 			*value = my_ft_atof(str);
 			free(str);
 			break ;
@@ -264,13 +265,29 @@ t_elem	*get_type_element(t_elem *elem, t_type type)
 	return (NULL);
 }
 
-t_vector	rotate_vector(t_vector v, t_vector orientation)
+t_vector	rotate_vector(t_vector v, t_vector direction)
 {
-	t_vector	res;
+	t_vector	axis;
+	double		angle;
+	double		cos_angle;
+	double		sin_angle;
+	t_vector	rotated;
 
-	(void)orientation;
-	res = v;
-	return (res);
+	angle = acos(direction.z);
+	axis = cross_product((t_vector){0, 0, 1}, direction);
+	axis = normalize(axis);
+	cos_angle = cos(angle);
+	sin_angle = sin(angle);
+	rotated.x = (cos_angle + (1 - cos_angle) * axis.x * axis.x) * v.x
+		+ ((1 - cos_angle) * axis.x * axis.y - sin_angle * axis.z) * v.y
+		+ ((1 - cos_angle) * axis.x * axis.z + sin_angle * axis.y) * v.z;
+	rotated.y = ((1 - cos_angle) * axis.x * axis.y + sin_angle * axis.z) * v.x
+		+ (cos_angle + (1 - cos_angle) * axis.y * axis.y) * v.y
+		+ ((1 - cos_angle) * axis.y * axis.z - sin_angle * axis.x) * v.z;
+	rotated.z = ((1 - cos_angle) * axis.x * axis.z - sin_angle * axis.y) * v.x
+		+ ((1 - cos_angle) * axis.y * axis.z + sin_angle * axis.x) * v.y
+		+ (cos_angle + (1 - cos_angle) * axis.z * axis.z) * v.z;
+	return (rotated);
 }
 
 bool	sphere_intersection(t_point origin, t_vector direction,
@@ -517,23 +534,30 @@ t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 	return (data);
 }
 
-void	display_axes(t_data *data, t_axes axes, char *label, int y_offset)
+void	display_value(t_data *data, double value, char *label, int y_offset)
 {
 	char	*str;
 
 	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
 		7, y_offset, 0x00FFFFFF, label);
-	str = ft_itoa(axes.x);
+	str = ft_ftoa(value);
 	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		150, y_offset, 0x00FFFFFF, str);
+		180, y_offset, 0x00FFFFFF, str);
 	free(str);
-	str = ft_itoa(axes.y);
+}
+
+void	display_axes(t_data *data, t_axes axes, char *label, int y_offset)
+{
+	char	*str;
+
+	display_value(data, axes.x, label, y_offset);
+	str = ft_ftoa(axes.y);
 	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		200, y_offset, 0x00FFFFFF, str);
+		280, y_offset, 0x00FFFFFF, str);
 	free(str);
-	str = ft_itoa(axes.z);
+	str = ft_ftoa(axes.z);
 	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		250, y_offset, 0x00FFFFFF, str);
+		380, y_offset, 0x00FFFFFF, str);
 	free(str);
 }
 
@@ -548,15 +572,8 @@ void	display_ambient_properties(t_data *data)
 
 void	display_sphere_properties(t_data *data, t_object *obj)
 {
-	char	*str;
-
 	display_axes(data, obj->pos, "Center:", 35);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		7, 50, 0x00FFFFFF, "Diameter:");
-	str = ft_itoa(obj->diameter);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		150, 50, 0x00FFFFFF, str);
-	free(str);
+	display_value(data, obj->diameter, "Diameter:", 50);
 }
 
 void	display_plane_properties(t_data *data, t_object *obj)
@@ -567,22 +584,10 @@ void	display_plane_properties(t_data *data, t_object *obj)
 
 void	display_cylinder_properties(t_data *data, t_object *obj)
 {
-	char	*str;
-
 	display_axes(data, obj->pos, "Center:", 35);
 	display_axes(data, obj->orientation, "Axis:", 50);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		7, 65, 0x00FFFFFF, "Diameter:");
-	str = ft_itoa(obj->diameter);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		150, 65, 0x00FFFFFF, str);
-	free(str);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		7, 80, 0x00FFFFFF, "Height:");
-	str = ft_itoa(obj->height);
-	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		150, 80, 0x00FFFFFF, str);
-	free(str);
+	display_value(data, obj->diameter, "Diameter:", 65);
+	display_value(data, obj->height, "Height:", 80);
 }
 
 void	display_object_properties(t_data *data, t_object *obj)

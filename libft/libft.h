@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:38:58 by rpaic             #+#    #+#             */
-/*   Updated: 2024/09/14 14:26:19 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/14 18:23:00 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,10 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+double	ft_atof(char *str);
+char	*ft_ftoa(double n);
+double	ft_pow(double n, int pow);
+double	ft_abs(double n);
 
 #endif // LIBFT_H
