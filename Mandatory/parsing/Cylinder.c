@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 17:13:07 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/11 19:50:22 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minirt.h"
+#include "../minirt.h"
 
 bool	assign_position_cylinder(char *line, t_elem *elem, int *status)
 {

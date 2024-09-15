@@ -6,7 +6,7 @@
 #    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/14 13:37:55 by samy_bravy       ###   ########.fr        #
+#    Updated: 2024/09/16 01:06:35 by samy_bravy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,20 +20,32 @@ NAME_BONUS = minirt_bonus
 
 SRCS =	./get_next_line/get_next_line.c \
 		./get_next_line/get_next_line_utils.c \
-		main.c \
-		./parsing/parsing.c \
-		./parsing/read_check_assign.c \
-		./parsing/get_number_of_elements.c \
-		./parsing/read_check_utils.c \
-		./parsing/utils_checks.c \
-		./parsing/ft_atof.c \
-		./parsing/Ambient.c \
-		./parsing/Camera.c \
-		./parsing/Light.c \
-		./parsing/Sphere.c \
-		./parsing/Plane.c \
-		./parsing/Cylinder.c \
-		./vectors/operations.c
+		Mandatory/main.c \
+		Mandatory/parsing/parsing.c \
+		Mandatory/parsing/read_check_assign.c \
+		Mandatory/parsing/get_number_of_elements.c \
+		Mandatory/parsing/read_check_utils.c \
+		Mandatory/parsing/utils_checks.c \
+		Mandatory/parsing/ft_atof.c \
+		Mandatory/parsing/Ambient.c \
+		Mandatory/parsing/Camera.c \
+		Mandatory/parsing/Light.c \
+		Mandatory/parsing/Sphere.c \
+		Mandatory/parsing/Plane.c \
+		Mandatory/parsing/Cylinder.c \
+		Mandatory/vectors/vect_operations.c \
+		Mandatory/vectors/vect_properties.c \
+		Mandatory/vectors/vect_creation.c \
+		Mandatory/user_interface/change_properties.c \
+		Mandatory/user_interface/display_properties.c \
+		Mandatory/user_interface/handle_input.c \
+		Mandatory/user_interface/mlx_hooks.c \
+		Mandatory/raytracing/create_lighting.c \
+		Mandatory/raytracing/obj_intersection.c \
+		Mandatory/raytracing/obj_intersection_utils.c \
+		Mandatory/raytracing/trace_rays.c \
+		Mandatory/raytracing/color_operations.c \
+		Mandatory/minirt_utils.c
 
 SRCS_BONUS =
 

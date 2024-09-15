@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 17:59:12 by amireid           #+#    #+#             */
-/*   Updated: 2024/09/06 14:39:23 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/16 01:09:48 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/get_next_line.h"
-#include "../headers/minirt.h"
-
-// #include <stdio.h>
+#include "get_next_line.h"
+#include "../libft/libft.h"
 
 char	*ft_left_string(int fd, char *fline)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   read_check_assign.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:00:52 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/11 20:04:17 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minirt.h"
+#include "../minirt.h"
 
 static void	check_first_char(char *string, int *status, t_elem *elem)
 {

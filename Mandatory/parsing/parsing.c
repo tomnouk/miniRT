@@ -6,11 +6,11 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:15:18 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/12 22:18:56 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minirt.h"
+#include "../minirt.h"
 
 static void	check_and_open_file(char *file, int argc)
 {

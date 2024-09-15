@@ -6,11 +6,11 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/06 14:41:35 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/15 15:20:13 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minirt.h"
+#include "../minirt.h"
 
 static bool	ft_isspace(char c)
 {

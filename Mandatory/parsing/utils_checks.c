@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_checks.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 13:56:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/11 19:52:09 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minirt.h"
+#include "../minirt.h"
 
 int	ft_split_len(char **split)
 {

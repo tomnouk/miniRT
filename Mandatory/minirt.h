@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/15 17:24:06 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 01:07:36 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define MINIRT_H
 
 # include "../libft/libft.h"
-# include "get_next_line.h"
+# include "../get_next_line/get_next_line.h"
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <errno.h>
@@ -193,17 +193,80 @@ void			check_assign_plane(char **l_split, t_elem *elem, int *status);
 void			check_assign_cylinder(char **l_split, t_elem *elem,
 					int *status);
 
-t_vector		normalize(t_vector v);
+t_point			ray_point(t_point origin, t_vector direction, double t);
+t_vector		reflect_ray(t_vector ray, t_vector normal);
 t_vector		two_points_vect(t_point a, t_point b);
+t_vector		rotate_vector(t_vector v, t_vector direction);
+
 t_vector		axes_sum(t_axes a, t_axes b);
 t_vector		axes_sub(t_axes a, t_axes b);
 t_vector		cross_product(t_vector a, t_vector b);
 t_vector		vect_mult(t_vector v, double a);
-t_point			ray_point(t_point origin, t_vector direction, double t);
-t_vector		reflect_ray(t_vector ray, t_vector normal);
 double			dot_product(t_vector a, t_vector b);
+
+t_vector		normalize(t_vector v);
 double			vect_length(t_vector v);
 double			vect_length2(t_vector v);
-double			vectors_angle(t_vector a, t_vector b);
+
+void			change_plane_properties(t_object *plane);
+void			change_sphere_properties(t_object *sphere);
+void			change_cylinder_properties(t_object *cylinder);
+void			change_object_properties(t_data *data);
+void			change_ambient_properties(t_data *data);
+
+int				create_trgb(unsigned char t, unsigned char r,
+					unsigned char g, unsigned char b);
+void			my_mlx_pixel_put(t_img *img, int x, int y, int color);
+t_color			mult_colors(t_color a, t_color b);
+t_color			sum_colors(t_color a, t_color b);
+t_color			mult_color_ratio(t_color a, double ratio);
+
+void			display_object_properties(t_data *data, t_object *obj);
+void			display_ambient_properties(t_data *data);
+
+char			*get_valid_input_ambient(void);
+void			set_camera_orientation(t_data *data);
+void			set_camera_position(t_data *data);
+void			set_light_position(t_data *data);
+void			prompt_and_set(char *prompt, double *value);
+
+int				esc(t_data *data);
+int				mouse_hook(int keycode, int x, int y, t_data *data);
+int				key_down(int keycode, t_data *data);
+
+bool			sphere_intersection(t_point origin, t_vector direction,
+					t_object *sphere, double *t);
+bool			plane_intersection(t_point origin, t_vector direction,
+					t_object *plane, double *t);
+bool			cylinder_intersection(t_point origin, t_vector direction,
+					t_object *cylinder, double *t);
+double			get_lowest_t_tape(t_object *cylinder, t_vector co,
+					t_vector direction, t_point origin);
+double			get_lowest_t_body(t_object *cylinder, t_vector co,
+					t_vector direction);
+
+bool			quadratic_equation(double a, double b, double c, double t[2]);
+bool			is_tape_t(double possible_t, t_object *cylinder, t_vector co,
+					t_vector direction);
+bool			is_body_t(double possible_t, t_object *cylinder, t_vector co,
+					t_vector direction);
+bool			t_minor(double t, double t_min);
+
+double			my_ft_atof(char *nptr);
+t_elem			find_elem(t_elem *elem, t_type type);
+void			display_value(t_data *data, double value, char *label,
+					int y_offset);
+void			display_axes(t_data *data, t_axes axes, char *label,
+					int y_offset);
+
+double			light_intensity(t_data *data, t_vector direction, t_point p,
+					t_object *obj);
+
+t_object		*first_obj_hit(t_data *data, t_point origin, t_vector direction,
+					double *t);
+void			get_camera_ray(t_data *data, t_point pixel_camera,
+					t_point *origin, t_vector *direction);
+t_point			get_pixel_camera(double fov, int x, int y);
+void			build_image(t_data *data);
 
 #endif
