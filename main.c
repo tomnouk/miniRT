@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 16:22:55 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/14 19:01:02 by samy_bravy       ###   ########.fr       */
+/*   Created: 2024/09/15 02:47:31 by samy_bravy        #+#    #+#             */
+/*   Updated: 2024/09/15 18:14:48 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	esc(t_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-static void	before_digit(char *nptr, int *n, int *i)
+void	before_digit(char *nptr, int *n, int *i)
 {
 	while ((nptr[*n] >= 9 && nptr[*n] <= 13) || nptr[*n] == ' ')
 		*n += 1;
@@ -183,9 +183,9 @@ char	*get_valid_input_ambient(void)
 
 	while (true)
 	{
-		printf("Press L to move light\n");
-		printf("Press C to change camera properties\n");
-		printf("Press Q to quit\n");
+		printf("Insert L to move light\n");
+		printf("Insert C to change camera properties\n");
+		printf("Insert Q to quit\n");
 		str = get_next_line(STDIN_FILENO);
 		if (str && (!ft_strcmp(str, "L\n")
 				|| !ft_strcmp(str, "C\n")
@@ -290,27 +290,49 @@ t_vector	rotate_vector(t_vector v, t_vector direction)
 	return (rotated);
 }
 
+bool	quadratic_equation(double a, double b, double c, double t[2])
+{
+	double	delta;
+	double	delta_sqrt;
+
+	delta = b * b - 4 * a * c;
+	if (delta < 0)
+	{
+		t[0] = 0;
+		t[1] = 0;
+		return (false);
+	}
+	delta_sqrt = sqrt(delta);
+	t[0] = (-b - delta_sqrt) / (2 * a);
+	t[1] = (-b + delta_sqrt) / (2 * a);
+	return (true);
+}
+
 bool	sphere_intersection(t_point origin, t_vector direction,
 	t_object *sphere, double *t)
 {
 	t_vector	co;
 	double		b;
 	double		c;
-	double		delta;
-	double		delta_sqrt;
+	double		possible_t[2];
 
 	co = two_points_vect(sphere->pos, origin);
 	b = 2 * dot_product(direction, co);
 	c = vect_length2(co) - sphere->diameter * sphere->diameter / 4;
-	delta = b * b - 4 * c;
-	if (delta < 0)
+	if (!quadratic_equation(1, b, c, possible_t))
+	{
+		*t = 0;
 		return (false);
-	delta_sqrt = sqrt(delta);
-	*t = (-b - delta_sqrt) / 2;
-	if (*t <= 1.0e-6)
-		*t = (-b + delta_sqrt) / 2;
-	if (*t <= 1.0e-6)
+	}
+	if (possible_t[0] > PRECISION)
+		*t = possible_t[0];
+	else if (possible_t[1] > PRECISION)
+		*t = possible_t[1];
+	else
+	{
+		*t = 0;
 		return (false);
+	}
 	return (true);
 }
 
@@ -323,21 +345,116 @@ bool	plane_intersection(t_point origin, t_vector direction,
 	p_o = two_points_vect(plane->pos, origin);
 	d_dot_n = dot_product(direction, plane->orientation);
 	if (d_dot_n == 0)
+	{
+		*t = 0;
 		return (false);
+	}
 	*t = -dot_product(p_o, plane->orientation) / d_dot_n;
-	if (*t <= 1.0e-6)
+	if (*t <= PRECISION)
 		return (false);
 	return (true);
+}
+
+bool	is_tape_t(double possible_t, t_object *cylinder, t_vector co,
+	t_vector direction)
+{
+	if (possible_t > PRECISION
+		&& vect_length(axes_sub(ray_point(co, direction, possible_t),
+				vect_mult(cylinder->orientation, cylinder->height / 2)))
+		<= cylinder->diameter / 2)
+		return (true);
+	return (false);
+}
+
+bool	is_body_t(double possible_t, t_object *cylinder, t_vector co,
+	t_vector direction)
+{
+	if (possible_t > PRECISION
+		&& ft_abs(dot_product(ray_point(co, direction, possible_t),
+				cylinder->orientation)) <= cylinder->height / 2)
+		return (true);
+	return (false);
+}
+
+bool	t_minor(double t, double t_min)
+{
+	if (t < t_min || t_min <= PRECISION)
+	{
+		t_min = t;
+		return (true);
+	}
+	return (false);
+}
+
+double	get_lowest_t_tape(t_object *cylinder, t_vector co, t_vector direction,
+	t_point origin)
+{
+	double		t;
+	double		possible_t;
+	t_vector	half_height_vect;
+	t_point		c1;
+	t_point		c2;
+
+	half_height_vect = vect_mult(cylinder->orientation,
+			cylinder->height / 2);
+	c1 = axes_sum(cylinder->pos, half_height_vect);
+	c2 = axes_sub(cylinder->pos, half_height_vect);
+	t = 0;
+	plane_intersection(origin, direction,
+		&(t_object){pl, c1, cylinder->orientation, 0, 0, cylinder->color, 0},
+		&possible_t);
+	if (is_tape_t(possible_t, cylinder, co, direction))
+		t = possible_t;
+	plane_intersection(origin, direction,
+		&(t_object){pl, c2, cylinder->orientation, 0, 0, cylinder->color, 0},
+		&possible_t);
+	if (is_tape_t(possible_t, cylinder,
+			vect_mult(co, -1), vect_mult(direction, -1))
+		&& t_minor(possible_t, t))
+		t = possible_t;
+	return (t);
+}
+
+double	get_lowest_t_body(t_object *cylinder, t_vector co, t_vector direction)
+{
+	double		t;
+	double		abc[3];
+	double		possible_t[2];
+	t_vector	normal_ray;
+	t_vector	normal_center;
+
+	normal_ray = axes_sub(direction, vect_mult(cylinder->orientation,
+				dot_product(direction, cylinder->orientation)));
+	normal_center = axes_sub(co, vect_mult(cylinder->orientation,
+				dot_product(co, cylinder->orientation)));
+	abc[0] = vect_length2(normal_ray);
+	abc[1] = 2 * dot_product(normal_ray, normal_center);
+	abc[2] = vect_length2(normal_center)
+		- cylinder->diameter * cylinder->diameter / 4;
+	t = 0;
+	if (quadratic_equation(abc[0], abc[1], abc[2], possible_t))
+	{
+		if (is_body_t(possible_t[0], cylinder, co, direction))
+			t = possible_t[0];
+		if (is_body_t(possible_t[1], cylinder, co, direction)
+			&& t_minor(possible_t[1], t))
+			t = possible_t[1];
+	}
+	return (t);
 }
 
 bool	cylinder_intersection(t_point origin, t_vector direction,
 	t_object *cylinder, double *t)
 {
-	(void)origin;
-	(void)direction;
-	(void)cylinder;
-	(void)t;
-	return (false);
+	t_vector	co;
+	double		possible_t;
+
+	co = two_points_vect(cylinder->pos, origin);
+	*t = get_lowest_t_body(cylinder, co, direction);
+	possible_t = get_lowest_t_tape(cylinder, co, direction, origin);
+	if (possible_t > PRECISION && t_minor(possible_t, *t))
+		*t = possible_t;
+	return (*t > PRECISION);
 }
 
 t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
@@ -366,14 +483,40 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 		}
 		i++;
 	}
+	*t = t_min;
 	return (first_obj);
 }
 
-t_vector	calculate_cylinder_normal(t_object *cylinder, t_point p)
+t_vector	calculate_cylinder_normal(t_object *cylinder, t_vector direction,
+	t_point origin)
 {
-	(void)cylinder;
-	(void)p;
-	return ((t_vector){0, 0, 0});
+	double		t_tape;
+	double		t_body;
+	t_vector	co;
+	t_vector	dir_on_axis_proj;
+
+	co = two_points_vect(cylinder->pos, origin);
+	t_tape = get_lowest_t_tape(cylinder, co, direction, origin);
+	t_body = get_lowest_t_body(cylinder, co, direction);
+	if (t_tape > PRECISION && (t_tape < t_body || t_body <= PRECISION))
+	{
+		if (dot_product(direction, cylinder->orientation) > 0)
+			return (normalize(cylinder->orientation));
+		return (normalize(vect_mult(cylinder->orientation, -1)));
+	}
+	dir_on_axis_proj = vect_mult(cylinder->orientation,
+			dot_product(direction, cylinder->orientation));
+	return (normalize(axes_sub(dir_on_axis_proj, direction)));
+}
+
+bool	hit_obj_before_light(t_data *data, t_point p, t_vector p_to_light)
+{
+	double	t_obj;
+
+	if (first_obj_hit(data, p, p_to_light, &t_obj) != NULL
+		&& t_obj < vect_length(two_points_vect(p, data->light.pos)))
+		return (true);
+	return (false);
 }
 
 double	light_intensity(t_data *data, t_vector direction, t_point p,
@@ -388,13 +531,13 @@ double	light_intensity(t_data *data, t_vector direction, t_point p,
 	else if (obj->type == sp)
 		normal = normalize(two_points_vect(obj->pos, p));
 	else if (obj->type == cy)
-		normal = calculate_cylinder_normal(obj, p);
+		normal = calculate_cylinder_normal(obj, direction, data->camera.pos);
 	p_to_light = normalize(two_points_vect(p, data->light.pos));
-	if (first_obj_hit(data, p, p_to_light, &(double){0}) != NULL)
+	if (hit_obj_before_light(data, p, p_to_light))
 		return (0);
 	intensity = dot_product(normal, p_to_light);
 	if (intensity < 0)
-		intensity = 0;
+		intensity *= -1;
 	if (obj->shininess > 0)
 	{
 		intensity += pow(dot_product(direction,
@@ -656,7 +799,8 @@ int	key_down(int keycode, t_data *data)
 	}
 	else if (keycode != XK_q)
 		return (0);
-	build_image(data);
+	if (keycode == XK_c)
+		build_image(data);
 	mlx_put_image_to_window(data->mlx_struct->mlx,
 		data->mlx_struct->mlx_win, data->mlx_struct->img.img, 0, 0);
 	display_ambient_properties(data);
