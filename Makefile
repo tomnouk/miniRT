@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/16 01:06:35 by samy_bravy       ###   ########.fr        #
+#    Updated: 2024/09/16 17:55:53 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,36 +18,63 @@ NAME = miniRT
 
 NAME_BONUS = minirt_bonus
 
-SRCS =	./get_next_line/get_next_line.c \
-		./get_next_line/get_next_line_utils.c \
-		Mandatory/main.c \
-		Mandatory/parsing/parsing.c \
-		Mandatory/parsing/read_check_assign.c \
-		Mandatory/parsing/get_number_of_elements.c \
-		Mandatory/parsing/read_check_utils.c \
-		Mandatory/parsing/utils_checks.c \
-		Mandatory/parsing/ft_atof.c \
-		Mandatory/parsing/Ambient.c \
-		Mandatory/parsing/Camera.c \
-		Mandatory/parsing/Light.c \
-		Mandatory/parsing/Sphere.c \
-		Mandatory/parsing/Plane.c \
-		Mandatory/parsing/Cylinder.c \
-		Mandatory/vectors/vect_operations.c \
-		Mandatory/vectors/vect_properties.c \
-		Mandatory/vectors/vect_creation.c \
-		Mandatory/user_interface/change_properties.c \
-		Mandatory/user_interface/display_properties.c \
-		Mandatory/user_interface/handle_input.c \
-		Mandatory/user_interface/mlx_hooks.c \
-		Mandatory/raytracing/create_lighting.c \
-		Mandatory/raytracing/obj_intersection.c \
-		Mandatory/raytracing/obj_intersection_utils.c \
-		Mandatory/raytracing/trace_rays.c \
-		Mandatory/raytracing/color_operations.c \
-		Mandatory/minirt_utils.c
+SRCS =			./get_next_line/get_next_line.c \
+				./get_next_line/get_next_line_utils.c \
+				Mandatory/main.c \
+				Mandatory/parsing/parsing.c \
+				Mandatory/parsing/read_check_assign.c \
+				Mandatory/parsing/get_number_of_elements.c \
+				Mandatory/parsing/read_check_utils.c \
+				Mandatory/parsing/utils_checks.c \
+				Mandatory/parsing/ft_atof.c \
+				Mandatory/parsing/Ambient.c \
+				Mandatory/parsing/Camera.c \
+				Mandatory/parsing/Light.c \
+				Mandatory/parsing/Sphere.c \
+				Mandatory/parsing/Plane.c \
+				Mandatory/parsing/Cylinder.c \
+				Mandatory/vectors/vect_operations.c \
+				Mandatory/vectors/vect_properties.c \
+				Mandatory/vectors/vect_creation.c \
+				Mandatory/user_interface/change_properties.c \
+				Mandatory/user_interface/display_properties.c \
+				Mandatory/user_interface/handle_input.c \
+				Mandatory/user_interface/mlx_hooks.c \
+				Mandatory/raytracing/create_lighting.c \
+				Mandatory/raytracing/obj_intersection.c \
+				Mandatory/raytracing/obj_intersection_utils.c \
+				Mandatory/raytracing/trace_rays.c \
+				Mandatory/raytracing/color_operations.c \
+				Mandatory/minirt_utils.c
 
-SRCS_BONUS =
+SRCS_BONUS =	./get_next_line/get_next_line.c \
+				./get_next_line/get_next_line_utils.c \
+				Bonus/main_bonus.c \
+				Bonus/parsing/parsing_bonus.c \
+				Bonus/parsing/read_check_assign_bonus.c \
+				Bonus/parsing/get_number_of_elements_bonus.c \
+				Bonus/parsing/read_check_utils_bonus.c \
+				Bonus/parsing/utils_checks_bonus.c \
+				Bonus/parsing/ft_atof_bonus.c \
+				Bonus/parsing/Ambient_bonus.c \
+				Bonus/parsing/Camera_bonus.c \
+				Bonus/parsing/Light_bonus.c \
+				Bonus/parsing/Sphere_bonus.c \
+				Bonus/parsing/Plane_bonus.c \
+				Bonus/parsing/Cylinder_bonus.c \
+				Bonus/vectors/vect_operations_bonus.c \
+				Bonus/vectors/vect_properties_bonus.c \
+				Bonus/vectors/vect_creation_bonus.c \
+				Bonus/user_interface/change_properties_bonus.c \
+				Bonus/user_interface/display_properties_bonus.c \
+				Bonus/user_interface/handle_input_bonus.c \
+				Bonus/user_interface/mlx_hooks_bonus.c \
+				Bonus/raytracing/create_lighting_bonus.c \
+				Bonus/raytracing/obj_intersection_bonus.c \
+				Bonus/raytracing/obj_intersection_utils_bonus.c \
+				Bonus/raytracing/trace_rays_bonus.c \
+				Bonus/raytracing/color_operations_bonus.c \
+				Bonus/minirt_utils_bonus.c
 
 MAKE_LIBFT = make -C libft
 
@@ -93,5 +120,7 @@ fclean:
 		@echo "\e[0;32mCleaned! 🧹\e[0;m"
 
 re: fclean all
+
+rebonus: fclean bonus
 
 .PHONY: all bonus clean fclean re
