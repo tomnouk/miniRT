@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:26:14 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 20:34:10 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ double	light_intensity(t_data *data, t_vector direction, t_point p,
 	p_to_light = normalize(two_points_vect(p, data->light.pos));
 	if (hit_obj_before_light(data, p, p_to_light))
 		return (0);
-	intensity = dot_product(normal, p_to_light);
-	if (intensity < 0)
-		intensity *= -1;
+	intensity = ft_abs(dot_product(normal, p_to_light));
 	if (obj->shininess > 0)
 	{
 		intensity += pow(dot_product(direction,

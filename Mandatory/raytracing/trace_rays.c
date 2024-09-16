@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 20:33:11 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,12 @@ static int	build_ray(t_data *data, t_point pixel_camera)
 				light_intensity(data, direction,
 					ray_point(origin, direction, t), obj)));
 	color = mult_colors(color, obj->color);
+	if (color.r > 255)
+		color.r = 255;
+	if (color.g > 255)
+		color.g = 255;
+	if (color.b > 255)
+		color.b = 255;
 	return (create_trgb(0, color.r, color.g, color.b));
 }
 
