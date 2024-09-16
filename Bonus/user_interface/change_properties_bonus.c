@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:50:42 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:08:24 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,24 @@ void	change_ambient_properties(t_data *data)
 	char	*str;
 
 	str = get_valid_input_ambient();
-	if (!ft_strcmp(str, "L\n"))
-		set_light_position(data);
+	if (!ft_strcmp(str, "L\n") && data->num_of_lights > 0)
+	{
+		free(str);
+		printf("Insert index of light to move (0-%d)\n",
+			data->num_of_lights - 1);
+		str = get_next_line(STDIN_FILENO);
+		if (str)
+			if (ft_atoi(str) >= 0 && ft_atoi(str) < data->num_of_lights)
+				set_light_position(&data->lights[ft_atoi(str)]);
+		if (!str || ft_atoi(str) < 0 || ft_atoi(str) >= data->num_of_lights)
+			printf("Invalid input, operation cancelled\n");
+		get_next_line(-1);
+	}
 	else if (!ft_strcmp(str, "C\n"))
 	{
 		set_camera_position(data);
 		set_camera_orientation(data);
 	}
-	free(str);
+	if (str)
+		free(str);
 }

@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:02:40 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 23:41:12 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ char	*get_valid_input_ambient(void)
 		if (str && (!ft_strcmp(str, "L\n")
 				|| !ft_strcmp(str, "C\n")
 				|| !ft_strcmp(str, "Q\n")))
-			return (str);
-		free(str);
+			break ;
+		if (str)
+			free(str);
 	}
 	get_next_line(-1);
+	return (str);
 }

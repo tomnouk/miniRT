@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:06:10 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 22:39:17 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	esc(t_data *data)
 	mlx_destroy_display(data->mlx_struct->mlx);
 	free(data->mlx_struct->mlx);
 	free(data->objects);
+	free(data->lights);
 	exit(EXIT_SUCCESS);
 }
 

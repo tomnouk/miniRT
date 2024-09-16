@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:02:40 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:05:18 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	prompt_and_set(char *prompt, double *value)
 	get_next_line(-1);
 }
 
-void	set_light_position(t_data *data)
+void	set_light_position(t_light *light)
 {
-	prompt_and_set("Enter light position x", &data->light.pos.x);
-	prompt_and_set("Enter light position y", &data->light.pos.y);
-	prompt_and_set("Enter light position z", &data->light.pos.z);
+	prompt_and_set("Enter light position x", &light->pos.x);
+	prompt_and_set("Enter light position y", &light->pos.y);
+	prompt_and_set("Enter light position z", &light->pos.z);
 }
 
 void	set_camera_position(t_data *data)
@@ -65,8 +65,9 @@ char	*get_valid_input_ambient(void)
 		if (str && (!ft_strcmp(str, "L\n")
 				|| !ft_strcmp(str, "C\n")
 				|| !ft_strcmp(str, "Q\n")))
-			return (str);
-		free(str);
+			break ;
+		if (str)
+			free(str);
 	}
-	get_next_line(-1);
+	return (str);
 }

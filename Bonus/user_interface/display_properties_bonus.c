@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:57:13 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:12:51 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,27 @@
 
 void	display_ambient_properties(t_data *data)
 {
-	display_axes(data, data->light.pos, "Light position:", 14);
-	display_axes(data, data->camera.pos, "Camera position:", 33);
-	display_axes(data, data->camera.orientation, "Camera orientation:", 49);
+	char	*str;
+	char	*tmp;
+	int		i;
+
+	i = -1;
+	while (++i < data->num_of_lights)
+	{
+		str = ft_itoa(i);
+		tmp = ft_strjoin("Light ", str);
+		free(str);
+		str = ft_strjoin(tmp, " position:");
+		free(tmp);
+		display_axes(data, data->lights[i].pos, str, 14 + 16 * i);
+		free(str);
+	}
+	i--;
+	display_axes(data, data->camera.pos, "Camera position:", 33 + 16 * i);
+	display_axes(data, data->camera.orientation,
+		"Camera orientation:", 49 + 16 * i);
 	mlx_string_put(data->mlx_struct->mlx, data->mlx_struct->mlx_win,
-		7, 73, 0x00FFFFFF, "Press C to change properties");
+		7, 73 + 16 * i, 0x00FFFFFF, "Press C to change properties");
 }
 
 static void	display_sphere_properties(t_data *data, t_object *obj)

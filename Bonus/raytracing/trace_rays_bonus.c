@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 20:32:03 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:07:14 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	build_ray(t_data *data, t_point pixel_camera)
 		return (create_trgb(0, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B));
 	color = mult_color_ratio(data->ambient.color, data->ambient.ratio);
 	color = sum_colors(color,
-			mult_color_ratio(data->light.color,
+			mult_color_ratio(data->lights[0].color,
 				light_intensity(data, direction,
 					ray_point(origin, direction, t), obj)));
 	color = mult_colors(color, obj->color);

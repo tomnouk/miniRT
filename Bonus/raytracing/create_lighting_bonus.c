@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:26:14 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 20:40:02 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:07:06 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ static t_vector	calculate_cylinder_normal(t_object *cylinder,
 	return (normalize(axes_sub(dir_on_axis_proj, direction)));
 }
 
-static bool	hit_obj_before_light(t_data *data, t_point p, t_vector p_to_light)
+static bool	hit_obj_before_light(t_data *data, t_point p, t_vector p_to_light,
+t_light *light)
 {
 	double	t_obj;
 
 	if (first_obj_hit(data, p, p_to_light, &t_obj) != NULL
-		&& t_obj < vect_length(two_points_vect(p, data->light.pos)))
+		&& t_obj < vect_length(two_points_vect(p, light->pos)))
 		return (true);
 	return (false);
 }
@@ -57,8 +58,8 @@ double	light_intensity(t_data *data, t_vector direction, t_point p,
 		normal = normalize(two_points_vect(obj->pos, p));
 	else if (obj->type == cy)
 		normal = calculate_cylinder_normal(obj, direction, data->camera.pos);
-	p_to_light = normalize(two_points_vect(p, data->light.pos));
-	if (hit_obj_before_light(data, p, p_to_light))
+	p_to_light = normalize(two_points_vect(p, data->lights[0].pos));
+	if (hit_obj_before_light(data, p, p_to_light, &data->lights[0]))
 		return (0);
 	intensity = ft_abs(dot_product(normal, p_to_light));
 	if (obj->shininess > 0)
@@ -68,5 +69,5 @@ double	light_intensity(t_data *data, t_vector direction, t_point p,
 		if (intensity < 0)
 			intensity = 0;
 	}
-	return (intensity * data->light.ratio);
+	return (intensity * data->lights[0].ratio);
 }

@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 11:06:45 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:15:36 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	check_repitition(t_elem *elem, int *status)
 				if (elem[i].type == elem[j].type)
 				{
 					(*status)++;
-					printf("%s", ERROR_REPITITION);
+					printf("%s", ERROR_REPETITION);
 					return ;
 				}
 			}

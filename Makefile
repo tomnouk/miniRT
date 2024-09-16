@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/16 17:55:53 by marvin           ###   ########.fr        #
+#    Updated: 2024/09/17 00:09:00 by samy_bravy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME = miniRT
 
-NAME_BONUS = minirt_bonus
+NAME_BONUS = miniRT_bonus
 
 SRCS =			./get_next_line/get_next_line.c \
 				./get_next_line/get_next_line_utils.c \

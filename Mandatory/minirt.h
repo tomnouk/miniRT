@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/16 01:07:36 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:15:36 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define ERROR_LIGHT_RATIO "Error\nInvalid light ratio\n"
 # define ERROR_LIGHT_COLOR "Error\nInvalid light color\n"
 # define ER_LIGHT_COLOR_VALUE "Error\nInvalid light color value\n"
-# define ERROR_REPITITION "Error\nRepitition of element\n"
+# define ERROR_REPETITION "Error\nRepetition of element\n"
 # define ERROR_SPHERE "Error\nInvalid sphere\n"
 # define ERROR_SPHERE_POSITION "Error\nInvalid sphere position\n"
 # define ERROR_SPHERE_DIAMETER "Error\nInvalid sphere diameter\n"

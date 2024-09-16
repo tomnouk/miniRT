@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/16 17:57:08 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 00:15:52 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define ERROR_LIGHT_RATIO "Error\nInvalid light ratio\n"
 # define ERROR_LIGHT_COLOR "Error\nInvalid light color\n"
 # define ER_LIGHT_COLOR_VALUE "Error\nInvalid light color value\n"
-# define ERROR_REPITITION "Error\nRepitition of element\n"
+# define ERROR_REPETITION "Error\nRepetition of elements\n"
 # define ERROR_SPHERE "Error\nInvalid sphere\n"
 # define ERROR_SPHERE_POSITION "Error\nInvalid sphere position\n"
 # define ERROR_SPHERE_DIAMETER "Error\nInvalid sphere diameter\n"
@@ -162,9 +162,10 @@ typedef struct s_object
 typedef struct t_data
 {
 	t_minilibx	*mlx_struct;
-	t_light		light;
 	t_amblight	ambient;
 	t_camera	camera;
+	t_light		*lights;
+	int			num_of_lights;
 	t_object	*objects;
 	int			num_of_objects;
 	t_object	*selected_obj;
@@ -227,7 +228,7 @@ void			display_ambient_properties(t_data *data);
 char			*get_valid_input_ambient(void);
 void			set_camera_orientation(t_data *data);
 void			set_camera_position(t_data *data);
-void			set_light_position(t_data *data);
+void			set_light_position(t_light *light);
 void			prompt_and_set(char *prompt, double *value);
 
 int				esc(t_data *data);

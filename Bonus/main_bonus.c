@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:47:31 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 20:39:54 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/16 22:39:49 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,46 @@ static void	build_objects(t_elem *elem, t_data *data)
 	}
 }
 
+static void	build_lights(t_elem *elem, t_data *data)
+{
+	int	i;
+
+	data->num_of_lights = 0;
+	i = -1;
+	while (elem[++i].type != NONE)
+	{
+		if (elem[i].type == L)
+			data->num_of_lights++;
+	}
+	data->lights = malloc(sizeof(t_light) * data->num_of_lights);
+	i = 0;
+	while (elem->type != NONE)
+	{
+		if (elem->type == L)
+		{
+			data->lights[i].pos = elem->pos;
+			data->lights[i].ratio = elem->ratio;
+			data->lights[i++].color = elem->color;
+		}
+		elem++;
+	}
+}
+
 static t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 {
 	t_data	data;
 	t_elem	camera;
-	t_elem	light;
 	t_elem	ambient;
 
 	data.mlx_struct = mlx_struct;
 	camera = find_elem(elem, C);
-	light = find_elem(elem, L);
 	ambient = find_elem(elem, A);
-	data.light.pos = light.pos;
-	data.light.ratio = light.ratio;
-	data.light.color = light.color;
 	data.ambient.ratio = ambient.ratio;
 	data.ambient.color = ambient.color;
 	data.camera.pos = camera.pos;
 	data.camera.orientation = camera.orientation;
 	data.camera.fov = camera.fov * M_PI / 180;
+	build_lights(elem, &data);
 	build_objects(elem, &data);
 	data.selected_obj = NULL;
 	data.changing_properties = false;
