@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:15:18 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/17 18:32:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	allocate_elem_initialize(t_elem **elem, char *file)
 		exit(1);
 	}
 	*elem = malloc(sizeof(t_elem) * (num_of_elem + 1));
-	while (++i < num_of_elem)
+	while (++i <= num_of_elem)
 		ft_bzero(&(*elem)[i], sizeof(t_elem));
 	(*elem)[num_of_elem].type = NONE;
 	close(fd);
