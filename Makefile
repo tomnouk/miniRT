@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/17 00:09:00 by samy_bravy       ###   ########.fr        #
+#    Updated: 2024/09/18 11:24:22 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc -g
+CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -O3
 
 NAME = miniRT
 

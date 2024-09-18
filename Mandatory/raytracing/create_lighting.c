@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:26:14 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/17 18:23:47 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/18 10:35:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ static t_vector	calculate_cylinder_normal(t_object *cylinder,
 	if (t_tape > PRECISION && (t_tape < t_body || t_body <= PRECISION))
 	{
 		if (dot_product(direction, cylinder->orientation) > 0)
-			return (normalize(cylinder->orientation));
-		return (normalize(vect_mult(cylinder->orientation, -1)));
+			return (cylinder->orientation);
+		return (vect_mult(cylinder->orientation, -1));
 	}
 	dir_on_axis_proj = vect_mult(cylinder->orientation,
 			dot_product(direction, cylinder->orientation));
-	return (normalize(axes_sub(dir_on_axis_proj, direction)));
+	return (axes_sub(dir_on_axis_proj, direction));
 }
 
 static bool	hit_obj_before_light(t_data *data, t_point p, t_vector p_to_light)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display_properties.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:57:13 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 01:08:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/18 11:13:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	display_object_properties(t_data *data, t_object *obj)
 {
 	char	*str;
 
+	str = "";
 	if (obj->type == pl)
 		str = "Plane";
 	else if (obj->type == sp)

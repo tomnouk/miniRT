@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 20:33:11 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/18 11:18:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 
 	first_obj = NULL;
 	i = 0;
+	t_min = 0;
 	while (i < data->num_of_objects)
 	{
 		if ((data->objects[i].type == sp && sphere_intersection(origin,
@@ -30,7 +31,7 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 			|| (data->objects[i].type == cy && cylinder_intersection(origin,
 					direction, &data->objects[i], t)))
 		{
-			if (first_obj == NULL || *t < t_min)
+			if (first_obj == NULL || (*t < t_min || t_min == 0))
 			{
 				t_min = *t;
 				first_obj = &data->objects[i];
@@ -73,7 +74,7 @@ static int	build_ray(t_data *data, t_point pixel_camera)
 
 	get_camera_ray(data, pixel_camera, &origin, &direction);
 	obj = first_obj_hit(data, origin, direction, &t);
-	if (obj == NULL)
+	if (obj == NULL || t < PRECISION)
 		return (create_trgb(0, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B));
 	color = mult_color_ratio(data->ambient.color, data->ambient.ratio);
 	color = sum_colors(color,
