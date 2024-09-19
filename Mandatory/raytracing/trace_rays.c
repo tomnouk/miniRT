@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/18 11:18:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/18 22:36:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 	int			i;
 
 	first_obj = NULL;
-	i = 0;
+	i = -1;
 	t_min = 0;
-	while (i < data->num_of_objects)
+	while (++i < data->num_of_objects)
 	{
 		if ((data->objects[i].type == sp && sphere_intersection(origin,
 					direction, &data->objects[i], t))
@@ -37,7 +37,6 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 				first_obj = &data->objects[i];
 			}
 		}
-		i++;
 	}
 	*t = t_min;
 	return (first_obj);
