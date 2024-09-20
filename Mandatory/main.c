@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:47:31 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/17 17:42:59 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/21 00:04:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	build_objects(t_elem *elem, t_data *data)
 			data->objects[i].diameter = elem->diameter;
 			data->objects[i].height = elem->height;
 			data->objects[i].color = elem->color;
-			data->objects[i++].shininess = 28;
+			data->objects[i++].shininess = elem->shininess;
 		}
 		elem++;
 	}

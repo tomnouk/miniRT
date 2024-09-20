@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amireid <amireid@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:05:05 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/20 18:44:20 by amireid          ###   ########.fr       */
+/*   Updated: 2024/09/21 00:03:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static bool	assign_position_light(char *line, t_elem *elem, int *status)
 	return (false);
 }
 
-static void	assign_color_light(t_elem *elem, int *status)
+static void	assign_color_light(t_elem *elem)
 {
 	elem->color.r = 255;
 	elem->color.g = 255;
@@ -55,5 +55,5 @@ void	check_assign_light(char **l_split, t_elem *elem, int *status)
 		printf("%s", ERROR_LIGHT_RATIO);
 		return ;
 	}
-	assign_color_light(l_split[3], elem, status);
+	assign_color_light(elem);
 }
