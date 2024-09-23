@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/17 00:15:36 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/23 08:41:10 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void			check_assign_camera(char **l_split, t_elem *elem, int *status);
 void			check_assign_light(char **l_split, t_elem *elem, int *status);
 int				validate_color_values(char **split_color, int *status,
 					int type);
-void			check_repitition(t_elem *elem, int *status);
+void			check_repetition(t_elem *elem, int *status);
 void			check_assign_sphere(char **l_split, t_elem *elem, int *status);
 void			check_assign_plane(char **l_split, t_elem *elem, int *status);
 void			check_assign_cylinder(char **l_split, t_elem *elem,

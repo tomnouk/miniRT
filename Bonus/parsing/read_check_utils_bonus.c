@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 11:06:45 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/17 00:15:36 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/23 08:41:56 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool	check_status(int *status, char **l_split)
 	return (false);
 }
 
-void	check_repitition(t_elem *elem, int *status)
+void	check_repetition(t_elem *elem, int *status)
 {
 	int	i;
 	int	j;
@@ -53,7 +53,7 @@ void	check_repitition(t_elem *elem, int *status)
 	i = -1;
 	while (elem[++i].type != NONE)
 	{
-		if (elem[i].type == A || elem[i].type == C || elem[i].type == L)
+		if (elem[i].type == A || elem[i].type == C)
 		{
 			j = i;
 			while (elem[++j].type != NONE)

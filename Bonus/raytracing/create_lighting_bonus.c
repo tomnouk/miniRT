@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:26:14 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/17 00:07:06 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/23 10:08:04 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,44 @@ t_light *light)
 	return (false);
 }
 
-double	light_intensity(t_data *data, t_vector direction, t_point p,
+static t_vector	get_obj_normal(t_object *obj, t_vector direction, t_point p,
+	t_point camera_pos)
+{
+	if (obj->type == pl)
+		return (obj->orientation);
+	else if (obj->type == sp)
+		return (normalize(two_points_vect(obj->pos, p)));
+	else if (obj->type == cy)
+		return (calculate_cylinder_normal(obj, direction, camera_pos));
+	return ((t_vector){0, 0, 0});
+}
+
+t_color	total_light_color(t_data *data, t_vector direction, t_point p,
 	t_object *obj)
 {
 	t_vector	normal;
 	t_vector	p_to_light;
+	t_color		color;
 	double		intensity;
+	int			i;
 
-	if (obj->type == pl)
-		normal = obj->orientation;
-	else if (obj->type == sp)
-		normal = normalize(two_points_vect(obj->pos, p));
-	else if (obj->type == cy)
-		normal = calculate_cylinder_normal(obj, direction, data->camera.pos);
-	p_to_light = normalize(two_points_vect(p, data->lights[0].pos));
-	if (hit_obj_before_light(data, p, p_to_light, &data->lights[0]))
-		return (0);
-	intensity = ft_abs(dot_product(normal, p_to_light));
-	if (obj->shininess > 0)
+	normal = get_obj_normal(obj, direction, p, data->camera.pos);
+	ft_bzero(&color, sizeof(t_color));
+	i = -1;
+	while (++i < data->num_of_lights)
 	{
-		intensity += pow(dot_product(direction,
-					reflect_ray(p_to_light, normal)), obj->shininess);
-		if (intensity < 0)
-			intensity = 0;
+		p_to_light = normalize(two_points_vect(p, data->lights[i].pos));
+		if (hit_obj_before_light(data, p, p_to_light, &data->lights[i]))
+			continue ;
+		intensity = ft_abs(dot_product(normal, p_to_light));
+		if (obj->shininess > 0)
+		{
+			intensity += pow(dot_product(direction,
+						reflect_ray(p_to_light, normal)), obj->shininess);
+			intensity *= intensity > 0;
+		}
+		color = sum_colors(color, mult_color_ratio(data->lights[i].color,
+					intensity * data->lights[i].ratio));
 	}
-	return (intensity * data->lights[0].ratio);
+	return (color);
 }

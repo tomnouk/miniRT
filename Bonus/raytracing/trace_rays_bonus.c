@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/17 00:07:14 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/23 09:21:46 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 	int			i;
 
 	first_obj = NULL;
-	i = 0;
-	while (i < data->num_of_objects)
+	i = -1;
+	t_min = 0;
+	while (++i < data->num_of_objects)
 	{
 		if ((data->objects[i].type == sp && sphere_intersection(origin,
 					direction, &data->objects[i], t))
@@ -30,13 +31,12 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 			|| (data->objects[i].type == cy && cylinder_intersection(origin,
 					direction, &data->objects[i], t)))
 		{
-			if (first_obj == NULL || *t < t_min)
+			if (first_obj == NULL || (*t < t_min || t_min == 0))
 			{
 				t_min = *t;
 				first_obj = &data->objects[i];
 			}
 		}
-		i++;
 	}
 	*t = t_min;
 	return (first_obj);
@@ -76,10 +76,8 @@ static int	build_ray(t_data *data, t_point pixel_camera)
 	if (obj == NULL)
 		return (create_trgb(0, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B));
 	color = mult_color_ratio(data->ambient.color, data->ambient.ratio);
-	color = sum_colors(color,
-			mult_color_ratio(data->lights[0].color,
-				light_intensity(data, direction,
-					ray_point(origin, direction, t), obj)));
+	color = sum_colors(color, total_light_color(data, direction,
+				ray_point(origin, direction, t), obj));
 	color = mult_colors(color, obj->color);
 	if (color.r > 255)
 		color.r = 255;

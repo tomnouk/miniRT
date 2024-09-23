@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:57:13 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/17 00:12:51 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/23 08:27:03 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	display_object_properties(t_data *data, t_object *obj)
 {
 	char	*str;
 
+	str = "";
 	if (obj->type == pl)
 		str = "Plane";
 	else if (obj->type == sp)

@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:00:52 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/23 08:41:10 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	read_check_assign(t_elem *elem, char *file, int *status)
 		line = get_next_line(fd);
 	}
 	if (!*status)
-		check_repitition(elem, status);
+		check_repetition(elem, status);
 	if (line != NULL)
 		free(line);
 	close(fd);
