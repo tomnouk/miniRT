@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/23 09:21:32 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/25 21:39:24 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef enum type
 	pl,
 	sp,
 	cy,
+	h_p
 }				t_type;
 
 typedef struct s_axes
@@ -108,6 +109,7 @@ typedef struct s_elem
 	double		ratio;
 	double		diameter;
 	double		height;
+	double		h_p_abcdefg[7];
 	double		shininess;
 }				t_elem;
 
@@ -155,6 +157,7 @@ typedef struct s_object
 	t_vector	orientation;
 	double		diameter;
 	double		height;
+	double		h_p_abcdefg[7];
 	t_color		color;
 	double		shininess;
 }	t_object;
@@ -245,6 +248,9 @@ double			get_lowest_t_tape(t_object *cylinder, t_vector co,
 					t_vector direction, t_point origin);
 double			get_lowest_t_body(t_object *cylinder, t_vector co,
 					t_vector direction);
+
+bool			hy_parab_intersection(t_point origin, t_vector direction,
+					t_object *h_paraboloid, double *t);
 
 bool			quadratic_equation(double a, double b, double c, double t[2]);
 bool			is_tape_t(double possible_t, t_object *cylinder, t_vector co,

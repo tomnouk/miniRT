@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:10:25 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/25 21:34:17 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ bool	sphere_intersection(t_point origin, t_vector direction,
 	double		c;
 	double		possible_t[2];
 
+	if (sphere->type != sp)
+		return (false);
 	co = two_points_vect(sphere->pos, origin);
 	b = 2 * dot_product(direction, co);
 	c = vect_length2(co) - sphere->diameter * sphere->diameter / 4;
@@ -46,6 +48,8 @@ bool	plane_intersection(t_point origin, t_vector direction,
 	t_vector	p_o;
 	double		d_dot_n;
 
+	if (plane->type != pl)
+		return (false);
 	p_o = two_points_vect(plane->pos, origin);
 	d_dot_n = dot_product(direction, plane->orientation);
 	if (d_dot_n == 0)
@@ -74,12 +78,12 @@ double	get_lowest_t_tape(t_object *cylinder, t_vector co,
 	c2 = axes_sub(cylinder->pos, half_height_vect);
 	t = 0;
 	plane_intersection(origin, direction,
-		&(t_object){pl, c1, cylinder->orientation, 0, 0, cylinder->color, 0},
+		&(t_object){pl, c1, cylinder->orientation, 0, 0, {0}, {0}, 0},
 		&possible_t);
 	if (is_tape_t(possible_t, cylinder, co, direction))
 		t = possible_t;
 	plane_intersection(origin, direction,
-		&(t_object){pl, c2, cylinder->orientation, 0, 0, cylinder->color, 0},
+		&(t_object){pl, c2, cylinder->orientation, 0, 0, {0}, {0}, 0},
 		&possible_t);
 	if (is_tape_t(possible_t, cylinder,
 			vect_mult(co, -1), vect_mult(direction, -1))
@@ -123,6 +127,8 @@ bool	cylinder_intersection(t_point origin, t_vector direction,
 	t_vector	co;
 	double		possible_t;
 
+	if (cylinder->type != cy)
+		return (false);
 	co = two_points_vect(cylinder->pos, origin);
 	*t = get_lowest_t_body(cylinder, co, direction);
 	possible_t = get_lowest_t_tape(cylinder, co, direction, origin);

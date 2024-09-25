@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/18 11:24:22 by marvin           ###   ########.fr        #
+#    Updated: 2024/09/25 21:41:14 by samy_bravy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ SRCS_BONUS =	./get_next_line/get_next_line.c \
 				Bonus/user_interface/mlx_hooks_bonus.c \
 				Bonus/raytracing/create_lighting_bonus.c \
 				Bonus/raytracing/obj_intersection_bonus.c \
+				Bonus/raytracing/hyperbolic_paraboloid_intersection_bonus.c \
 				Bonus/raytracing/obj_intersection_utils_bonus.c \
 				Bonus/raytracing/trace_rays_bonus.c \
 				Bonus/raytracing/color_operations_bonus.c \

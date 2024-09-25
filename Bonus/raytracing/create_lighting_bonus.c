@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:26:14 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/23 10:08:04 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/25 21:01:31 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,18 @@ static t_vector	calculate_cylinder_normal(t_object *cylinder,
 	return (normalize(axes_sub(dir_on_axis_proj, direction)));
 }
 
+static t_vector	calculate_h_p_normal(double h_p_abcdefg[7], t_point p)
+{
+	t_vector	normal;
+
+	normal.x = 2 * h_p_abcdefg[0] * p.x + h_p_abcdefg[3] * p.y
+		+ h_p_abcdefg[4];
+	normal.y = 2 * h_p_abcdefg[1] * p.y + h_p_abcdefg[3] * p.x
+		+ h_p_abcdefg[5];
+	normal.z = h_p_abcdefg[2];
+	return (normalize(normal));
+}
+
 static bool	hit_obj_before_light(t_data *data, t_point p, t_vector p_to_light,
 t_light *light)
 {
@@ -54,6 +66,8 @@ static t_vector	get_obj_normal(t_object *obj, t_vector direction, t_point p,
 		return (normalize(two_points_vect(obj->pos, p)));
 	else if (obj->type == cy)
 		return (calculate_cylinder_normal(obj, direction, camera_pos));
+	else if (obj->type == h_p)
+		return (calculate_h_p_normal(obj->h_p_abcdefg, p));
 	return ((t_vector){0, 0, 0});
 }
 

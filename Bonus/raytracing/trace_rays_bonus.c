@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/23 09:21:46 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/25 21:33:04 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,10 @@ t_object	*first_obj_hit(t_data *data, t_point origin, t_vector direction,
 	t_min = 0;
 	while (++i < data->num_of_objects)
 	{
-		if ((data->objects[i].type == sp && sphere_intersection(origin,
-					direction, &data->objects[i], t))
-			|| (data->objects[i].type == pl && plane_intersection(origin,
-					direction, &data->objects[i], t))
-			|| (data->objects[i].type == cy && cylinder_intersection(origin,
-					direction, &data->objects[i], t)))
+		if ((sphere_intersection(origin, direction, &data->objects[i], t))
+			|| (plane_intersection(origin, direction, &data->objects[i], t))
+			|| (cylinder_intersection(origin, direction, &data->objects[i], t))
+			|| (hy_parab_intersection(origin, direction, &data->objects[i], t)))
 		{
 			if (first_obj == NULL || (*t < t_min || t_min == 0))
 			{
