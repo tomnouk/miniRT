@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_lighting_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:26:14 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/25 21:01:31 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/26 12:51:51 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static t_vector	calculate_h_p_normal(double h_p_abcdefg[7], t_point p)
 {
 	t_vector	normal;
 
-	normal.x = 2 * h_p_abcdefg[0] * p.x + h_p_abcdefg[3] * p.y
-		+ h_p_abcdefg[4];
-	normal.y = 2 * h_p_abcdefg[1] * p.y + h_p_abcdefg[3] * p.x
-		+ h_p_abcdefg[5];
-	normal.z = h_p_abcdefg[2];
+	normal.x = 2 * h_p_abcdefg[pA] * p.x + h_p_abcdefg[pD] * p.y
+		+ h_p_abcdefg[pE];
+	normal.y = 2 * h_p_abcdefg[pB] * p.y + h_p_abcdefg[pD] * p.x
+		+ h_p_abcdefg[pF];
+	normal.z = h_p_abcdefg[pC];
 	return (normalize(normal));
 }
 
