@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/23 08:41:10 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/28 11:51:46 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@
 # define ERROR_CYLINDER_COLOR "Error\nInvalid cylinder color\n"
 # define ER_CYLINDER_COLOR_VALUE "Error\nInvalid cylinder color value\n"
 
-# define WIDTH 1428
+# define WIDTH 1240
 # define HEIGHT 860
 # define PRECISION 1.0e-6
 # define BACKGROUND_R 0
