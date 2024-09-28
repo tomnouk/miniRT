@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:56:44 by aeid              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/28 11:29:16 by samy_bravy       ###   ########.fr       */
+=======
+/*   Updated: 2024/09/26 12:50:18 by sdell-er         ###   ########.fr       */
+>>>>>>> c32f11297a0ccdb73fdbda71aeed5fa744e6d167
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +153,17 @@ typedef struct camera
 	t_vector	orientation;
 	double		fov;
 }	t_camera;
+
+typedef enum e_h_p_params
+{
+	pA,
+	pB,
+	pC,
+	pD,
+	pE,
+	pF,
+	pG
+}	t_h_p_params;
 
 typedef struct s_object
 {
