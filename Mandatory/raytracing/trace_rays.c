@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:31:26 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/18 22:36:30 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/28 11:49:34 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,13 @@ t_point	get_pixel_camera(double fov, int x, int y)
 {
 	double	pixel_camera_x;
 	double	pixel_camera_y;
+	double	tan_half_fov;
 
+	tan_half_fov = tan(fov / 2);
 	pixel_camera_x = (2 * (x + 0.5) / (double)WIDTH - 1)
-		* tan(fov / 2) * WIDTH / HEIGHT;
+		* tan_half_fov * WIDTH / HEIGHT;
 	pixel_camera_y = (1 - 2 * (y + 0.5) / (double)HEIGHT)
-		* tan(fov / 2);
+		* tan_half_fov;
 	return ((t_point){pixel_camera_x, pixel_camera_y, 1});
 }
 

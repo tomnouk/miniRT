@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:47:31 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 22:39:49 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/28 11:45:27 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	build_objects(t_elem *elem, t_data *data)
 		{
 			data->objects[i].type = elem->type;
 			data->objects[i].pos = elem->pos;
-			data->objects[i].orientation = elem->orientation;
+			data->objects[i].orientation = normalize(elem->orientation);
 			data->objects[i].diameter = elem->diameter;
 			data->objects[i].height = elem->height;
 			data->objects[i].color = elem->color;
@@ -78,7 +78,9 @@ static t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 	data.ambient.ratio = ambient.ratio;
 	data.ambient.color = ambient.color;
 	data.camera.pos = camera.pos;
-	data.camera.orientation = camera.orientation;
+	data.camera.orientation = normalize(camera.orientation);
+	if (camera.fov == 180)
+		camera.fov = 179.9;
 	data.camera.fov = camera.fov * M_PI / 180;
 	build_lights(elem, &data);
 	build_objects(elem, &data);
