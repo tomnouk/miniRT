@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:50:42 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/17 00:08:24 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/28 12:39:35 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	change_plane_properties(t_object *plane)
 	prompt_and_set("Enter plane normal vector x", &plane->orientation.x);
 	prompt_and_set("Enter plane normal vector y", &plane->orientation.y);
 	prompt_and_set("Enter plane normal vector z", &plane->orientation.z);
+	plane->orientation = normalize(plane->orientation);
 }
 
 void	change_sphere_properties(t_object *sphere)
@@ -41,6 +42,7 @@ void	change_cylinder_properties(t_object *cylinder)
 		&cylinder->orientation.y);
 	prompt_and_set("Enter cylinder orientation vector z",
 		&cylinder->orientation.z);
+	cylinder->orientation = normalize(cylinder->orientation);
 	prompt_and_set("Enter cylinder diameter", &cylinder->diameter);
 	prompt_and_set("Enter cylinder height", &cylinder->height);
 }

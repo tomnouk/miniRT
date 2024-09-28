@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:02:40 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/16 23:41:12 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/28 12:39:43 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	set_camera_orientation(t_data *data)
 	prompt_and_set("Enter camera orientation x", &data->camera.orientation.x);
 	prompt_and_set("Enter camera orientation y", &data->camera.orientation.y);
 	prompt_and_set("Enter camera orientation z", &data->camera.orientation.z);
+	data->camera.orientation = normalize(data->camera.orientation);
 }
 
 char	*get_valid_input_ambient(void)
