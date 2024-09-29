@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hyperbolic_paraboloid_intersection_bonus.c         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 21:41:39 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/26 16:18:58 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/09/29 22:10:27 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static double	*calculate_abc_h_p(t_object *h_paraboloid, t_vector direction,
 	return (abc);
 }
 
-static t_point	get_h_p_vertex(double h_p_abcdefg[7])
+static t_point	get_h_p_vertex(double h_p_abcdefg[7]) // controllare divisioni per 0
 {
 	t_point	vertex;
 
@@ -63,9 +63,11 @@ static t_point	get_h_p_vertex(double h_p_abcdefg[7])
 static bool	is_in_h_p_diameter(t_point origin, t_vector direction,
 	t_object *h_paraboloid, double t)
 {
-	return (vect_length2(axes_sub(ray_point(origin, direction, t),
-				get_h_p_vertex(h_paraboloid->h_p_abcdefg)))
-		< h_paraboloid->height * h_paraboloid->height / 4);
+	double	distance;
+
+	distance = vect_length2(axes_sub(ray_point(origin, direction, t),
+				get_h_p_vertex(h_paraboloid->h_p_abcdefg)));
+	return (distance < h_paraboloid->diameter * h_paraboloid->diameter / 4);
 }
 
 bool	hy_parab_intersection(t_point origin, t_vector direction,

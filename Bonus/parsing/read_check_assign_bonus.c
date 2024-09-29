@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_check_assign_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:00:52 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/29 19:52:51 by aeid             ###   ########.fr       */
+/*   Updated: 2024/09/29 22:16:24 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static void	check_assign(char *line, int *status, t_elem *elem)
 	distribution_assign(l_split, elem, status);
 	ft_free_split(l_split);
 }
+
 // is check repetition here valid?
 void	read_check_assign(t_elem *elem, char *file, int *status)
 {

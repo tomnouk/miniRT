@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:47:31 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/28 11:45:27 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/29 22:17:22 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,21 @@ static void	build_objects(t_elem *elem, t_data *data)
 	i = -1;
 	while (elem[++i].type != NONE)
 	{
-		if (elem[i].type == pl || elem[i].type == sp || elem[i].type == cy)
+		if (elem[i].type == pl || elem[i].type == sp || elem[i].type == cy || elem[i].type == h_p)
 			data->num_of_objects++;
 	}
 	data->objects = malloc(sizeof(t_object) * data->num_of_objects);
 	i = 0;
 	while (elem->type != NONE)
 	{
-		if (elem->type == pl || elem->type == sp || elem->type == cy)
+		if (elem->type == pl || elem->type == sp || elem->type == cy || elem->type == h_p)
 		{
 			data->objects[i].type = elem->type;
 			data->objects[i].pos = elem->pos;
 			data->objects[i].orientation = normalize(elem->orientation);
 			data->objects[i].diameter = elem->diameter;
 			data->objects[i].height = elem->height;
+			ft_memcpy(data->objects[i].h_p_abcdefg, elem->h_p_abcdefg, sizeof(double) * 7);
 			data->objects[i].color = elem->color;
 			data->objects[i++].shininess = 28;
 		}
