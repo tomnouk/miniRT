@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_checks_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 13:56:41 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/16 17:51:42 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/29 20:15:37 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int	validate_color_values(char **split_color, int *status, int type)
 				printf("%s", ER_PLANE_COLOR_VALUE);
 			if (type == 4)
 				printf("%s", ER_CYLINDER_COLOR_VALUE);
+			if (type == 5)
+				printf("%s", ER_PARABOLOID_COLOR_VALUE);
 			ft_free_split(split_color);
 			return (1);
 		}

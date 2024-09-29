@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_check_assign_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:00:52 by aeid              #+#    #+#             */
-/*   Updated: 2024/09/23 08:41:10 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/29 19:52:51 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,9 @@
 static void	check_first_char(char *string, int *status, t_elem *elem)
 {
 	if (ft_strlen(string) == 1)
-	{
-		if (!ft_strncmp(string, "A", 1))
-			elem->type = A;
-		else if (!ft_strncmp(string, "C", 1))
-			elem->type = C;
-		else if (!ft_strncmp(string, "L", 1))
-			elem->type = L;
-		else
-			(*status)++;
-	}
-	else if (ft_strlen(string) == 2)
-	{
-		if (!ft_strncmp(string, "pl", 2))
-			elem->type = pl;
-		else if (!ft_strncmp(string, "sp", 2))
-			elem->type = sp;
-		else if (!ft_strncmp(string, "cy", 2))
-			elem->type = cy;
-		else
-			(*status)++;
-	}
+		assigning_if_one_char(string, status, elem);
+	else if (ft_strlen(string) == 2 || ft_strlen(string) == 3)
+		assigning_if_more_chars(string, status, elem);
 	else
 		(*status)++;
 }
@@ -54,6 +36,8 @@ static void	distribution_assign(char **l_split, t_elem *elem, int *status)
 		check_assign_sphere(l_split, elem, status);
 	else if (elem->type == cy)
 		check_assign_cylinder(l_split, elem, status);
+	else if (elem->type == h_p)
+		check_assign_paraboloid(l_split, elem, status);
 }
 
 static void	check_assign(char *line, int *status, t_elem *elem)
@@ -69,7 +53,7 @@ static void	check_assign(char *line, int *status, t_elem *elem)
 	distribution_assign(l_split, elem, status);
 	ft_free_split(l_split);
 }
-
+// is check repetition here valid?
 void	read_check_assign(t_elem *elem, char *file, int *status)
 {
 	int		fd;

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 11:52:24 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/28 11:52:25 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/29 20:21:30 by aeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_BONUS_H
 # define MINIRT_BONUS_H
 
-# include "../libft/libft.h"
 # include "../get_next_line/get_next_line.h"
+# include "../libft/libft.h"
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <errno.h>
@@ -62,6 +62,11 @@
 # define ERROR_CYLINDER_HIGHT "Error\nInvalid cylinder hight\n"
 # define ERROR_CYLINDER_COLOR "Error\nInvalid cylinder color\n"
 # define ER_CYLINDER_COLOR_VALUE "Error\nInvalid cylinder color value\n"
+# define ERROR_PARABOLOID "Error\nInvalid paraboloid\n"
+# define ERROR_PARABOLOID_PARAMS "Error\nInvalid paraboloid parameters\n"
+# define ERROR_PARABOLOID_DIAMETER "Error\nInvalid paraboloid diameter\n"
+# define ERROR_PARABOLOID_COLOR "Error\nInvalid paraboloid color\n"
+# define ER_PARABOLOID_COLOR_VALUE "Error\nInvalid paraboloid color value\n"
 
 # define WIDTH 1240
 # define HEIGHT 860
@@ -115,12 +120,12 @@ typedef struct s_elem
 
 typedef struct s_img
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_img;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_img;
 
 typedef struct s_minilibx
 {
@@ -128,27 +133,27 @@ typedef struct s_minilibx
 	void		*mlx_win;
 	char		*name;
 	t_img		img;
-}	t_minilibx;
+}				t_minilibx;
 
 typedef struct s_light
 {
 	t_point		pos;
 	double		ratio;
 	t_color		color;
-}	t_light;
+}				t_light;
 
 typedef struct s_amblight
 {
 	double		ratio;
 	t_color		color;
-}	t_amblight;
+}				t_amblight;
 
 typedef struct camera
 {
 	t_point		pos;
 	t_vector	orientation;
 	double		fov;
-}	t_camera;
+}				t_camera;
 
 typedef enum e_h_p_params
 {
@@ -159,7 +164,7 @@ typedef enum e_h_p_params
 	pE,
 	pF,
 	pG
-}	t_h_p_params;
+}				t_h_p_params;
 
 typedef struct s_object
 {
@@ -171,7 +176,7 @@ typedef struct s_object
 	double		h_p_abcdefg[7];
 	t_color		color;
 	double		shininess;
-}	t_object;
+}				t_object;
 
 typedef struct t_data
 {
@@ -184,7 +189,7 @@ typedef struct t_data
 	int			num_of_objects;
 	t_object	*selected_obj;
 	bool		changing_properties;
-}	t_data;
+}				t_data;
 
 void			parsing(t_elem **elem, char *file, int argc);
 void			read_check_assign(t_elem *elem, char *file, int *status);
@@ -229,8 +234,8 @@ void			change_cylinder_properties(t_object *cylinder);
 void			change_object_properties(t_data *data);
 void			change_ambient_properties(t_data *data);
 
-int				create_trgb(unsigned char t, unsigned char r,
-					unsigned char g, unsigned char b);
+int				create_trgb(unsigned char t, unsigned char r, unsigned char g,
+					unsigned char b);
 void			my_mlx_pixel_put(t_img *img, int x, int y, int color);
 t_color			mult_colors(t_color a, t_color b);
 t_color			sum_colors(t_color a, t_color b);
@@ -286,5 +291,9 @@ void			get_camera_ray(t_data *data, t_point pixel_camera,
 					t_point *origin, t_vector *direction);
 t_point			get_pixel_camera(double fov, int x, int y);
 void			build_image(t_data *data);
-
+void			assigning_if_one_char(char *string, int *status, t_elem *elem);
+void			assigning_if_more_chars(char *string, int *status,
+					t_elem *elem);
+void			check_assign_paraboloid(char **l_split, t_elem *elem,
+					int *status);
 #endif

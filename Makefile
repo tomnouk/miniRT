@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+         #
+#    By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/25 21:41:14 by samy_bravy       ###   ########.fr        #
+#    Updated: 2024/09/29 20:19:36 by aeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,8 @@ SRCS_BONUS =	./get_next_line/get_next_line.c \
 				Bonus/parsing/Sphere_bonus.c \
 				Bonus/parsing/Plane_bonus.c \
 				Bonus/parsing/Cylinder_bonus.c \
+				Bonus/parsing/extras_for_bonus.c \
+				Bonus/parsing/paraboloid_bonus.c \
 				Bonus/vectors/vect_operations_bonus.c \
 				Bonus/vectors/vect_properties_bonus.c \
 				Bonus/vectors/vect_creation_bonus.c \
