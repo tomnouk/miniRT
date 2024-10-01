@@ -6,7 +6,7 @@
 /*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 21:41:39 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/29 22:10:27 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/09/30 09:14:10 by samy_bravy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,62 @@ static double	*calculate_abc_h_p(t_object *h_paraboloid, t_vector direction,
 	return (abc);
 }
 
-static t_point	get_h_p_vertex(double h_p_abcdefg[7]) // controllare divisioni per 0
+static t_point	get_h_p_vertex(double h_p_abcdefg[7])
 {
 	t_point	vertex;
 
-	vertex.x = (h_p_abcdefg[pD] * h_p_abcdefg[pF]
-			- 2 * h_p_abcdefg[pE] * h_p_abcdefg[pB])
-		/ (4 * h_p_abcdefg[pA] * h_p_abcdefg[pB]
-			- h_p_abcdefg[pD] * h_p_abcdefg[pD]);
-	vertex.y = (h_p_abcdefg[pD] * h_p_abcdefg[pE]
-			- 2 * h_p_abcdefg[pF] * h_p_abcdefg[pA])
-		/ (4 * h_p_abcdefg[pA] * h_p_abcdefg[pB]
-			- h_p_abcdefg[pD] * h_p_abcdefg[pD]);
-	vertex.z = (-1 / h_p_abcdefg[pC])
-		* (h_p_abcdefg[pA] * vertex.x * vertex.x
-			+ h_p_abcdefg[pB] * vertex.y * vertex.y
-			+ h_p_abcdefg[pD] * vertex.x * vertex.y
-			+ h_p_abcdefg[pE] * vertex.x
-			+ h_p_abcdefg[pF] * vertex.y
-			+ h_p_abcdefg[pG]);
+	if (h_p_abcdefg[pA] == 0)
+	{
+		if (h_p_abcdefg[pD] == 0)
+		{
+			if (h_p_abcdefg[pB] == 0)
+			{
+				vertex.x = 0;
+				vertex.y = 0;
+			}
+			else
+			{
+				vertex.x = 0;
+				vertex.y = -h_p_abcdefg[pF] / (2 * h_p_abcdefg[pB]);
+			}
+		}
+		else
+		{
+			vertex.x = 2 * h_p_abcdefg[pB] * h_p_abcdefg[pE]
+				/ ((h_p_abcdefg[pD] * h_p_abcdefg[pD])
+					- h_p_abcdefg[pF] / h_p_abcdefg[pD]);
+			vertex.y = -h_p_abcdefg[pE] / h_p_abcdefg[pD];
+		}
+	}
+	else if (4 * h_p_abcdefg[pA] * h_p_abcdefg[pB]
+		- h_p_abcdefg[pD] * h_p_abcdefg[pD] == 0)
+	{
+		vertex.x = h_p_abcdefg[pE] / (2 * h_p_abcdefg[pA]);
+		vertex.y = 0;
+	}
+	else
+	{
+		vertex.x = (h_p_abcdefg[pD] * h_p_abcdefg[pF]
+				- 2 * h_p_abcdefg[pE] * h_p_abcdefg[pB])
+			/ (4 * h_p_abcdefg[pA] * h_p_abcdefg[pB]
+				- h_p_abcdefg[pD] * h_p_abcdefg[pD]);
+		vertex.y = (h_p_abcdefg[pD] * h_p_abcdefg[pE]
+				- 2 * h_p_abcdefg[pF] * h_p_abcdefg[pA])
+			/ (4 * h_p_abcdefg[pA] * h_p_abcdefg[pB]
+				- h_p_abcdefg[pD] * h_p_abcdefg[pD]);
+	}
+	if (h_p_abcdefg[pC] == 0)
+		vertex.z = 0;
+	else
+	{
+		vertex.z = (-1 / h_p_abcdefg[pC])
+			* (h_p_abcdefg[pA] * vertex.x * vertex.x
+				+ h_p_abcdefg[pB] * vertex.y * vertex.y
+				+ h_p_abcdefg[pD] * vertex.x * vertex.y
+				+ h_p_abcdefg[pE] * vertex.x
+				+ h_p_abcdefg[pF] * vertex.y
+				+ h_p_abcdefg[pG]);
+	}
 	return (vertex);
 }
 
