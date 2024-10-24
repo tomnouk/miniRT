@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 11:52:24 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/29 20:21:30 by aeid             ###   ########.fr       */
+/*   Updated: 2024/10/24 13:06:37 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,10 @@ double			get_lowest_t_body(t_object *cylinder, t_vector co,
 
 bool			hy_parab_intersection(t_point origin, t_vector direction,
 					t_object *h_paraboloid, double *t);
+
+void			pa_is_zero(double h_p_abcdefg[7], t_point *vertex);
+void			nothing_is_zero(double h_p_abcdefg[7], t_point *vertex);
+void			c_is_not_zero(double h_p_abcdefg[7], t_point *vertex);
 
 bool			quadratic_equation(double a, double b, double c, double t[2]);
 bool			is_tape_t(double possible_t, t_object *cylinder, t_vector co,

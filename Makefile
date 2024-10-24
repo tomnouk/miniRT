@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aeid <aeid@student.42.fr>                  +#+  +:+       +#+         #
+#    By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 12:33:09 by anomourn          #+#    #+#              #
-#    Updated: 2024/09/29 20:19:36 by aeid             ###   ########.fr        #
+#    Updated: 2024/10/24 13:00:18 by sdell-er         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ SRCS_BONUS =	./get_next_line/get_next_line.c \
 				Bonus/raytracing/create_lighting_bonus.c \
 				Bonus/raytracing/obj_intersection_bonus.c \
 				Bonus/raytracing/hyperbolic_paraboloid_intersection_bonus.c \
+				Bonus/raytracing/h_p_intersection_utils_bonus.c \
 				Bonus/raytracing/obj_intersection_utils_bonus.c \
 				Bonus/raytracing/trace_rays_bonus.c \
 				Bonus/raytracing/color_operations_bonus.c \

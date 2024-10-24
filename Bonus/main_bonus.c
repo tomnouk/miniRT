@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samy_bravy <samy_bravy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:47:31 by samy_bravy        #+#    #+#             */
-/*   Updated: 2024/09/29 22:17:22 by samy_bravy       ###   ########.fr       */
+/*   Updated: 2024/10/24 12:59:23 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,20 @@ static void	build_objects(t_elem *elem, t_data *data)
 {
 	int	i;
 
-	data->num_of_objects = 0;
-	i = -1;
-	while (elem[++i].type != NONE)
-	{
-		if (elem[i].type == pl || elem[i].type == sp || elem[i].type == cy || elem[i].type == h_p)
-			data->num_of_objects++;
-	}
 	data->objects = malloc(sizeof(t_object) * data->num_of_objects);
 	i = 0;
 	while (elem->type != NONE)
 	{
-		if (elem->type == pl || elem->type == sp || elem->type == cy || elem->type == h_p)
+		if (elem->type == pl || elem->type == sp
+			|| elem->type == cy || elem->type == h_p)
 		{
 			data->objects[i].type = elem->type;
 			data->objects[i].pos = elem->pos;
 			data->objects[i].orientation = normalize(elem->orientation);
 			data->objects[i].diameter = elem->diameter;
 			data->objects[i].height = elem->height;
-			ft_memcpy(data->objects[i].h_p_abcdefg, elem->h_p_abcdefg, sizeof(double) * 7);
+			ft_memcpy(data->objects[i].h_p_abcdefg, elem->h_p_abcdefg,
+				sizeof(double) * 7);
 			data->objects[i].color = elem->color;
 			data->objects[i++].shininess = 28;
 		}
@@ -69,9 +64,10 @@ static void	build_lights(t_elem *elem, t_data *data)
 
 static t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 {
-	t_data	data;
-	t_elem	camera;
-	t_elem	ambient;
+	t_data			data;
+	t_elem			camera;
+	t_elem			ambient;
+	static int		i = -1;
 
 	data.mlx_struct = mlx_struct;
 	camera = find_elem(elem, C);
@@ -84,6 +80,11 @@ static t_data	build_data(t_elem *elem, t_minilibx *mlx_struct)
 		camera.fov = 179.9;
 	data.camera.fov = camera.fov * M_PI / 180;
 	build_lights(elem, &data);
+	data.num_of_objects = 0;
+	while (elem[++i].type != NONE)
+		if (elem[i].type == pl || elem[i].type == sp
+			|| elem[i].type == cy || elem[i].type == h_p)
+			data.num_of_objects++;
 	build_objects(elem, &data);
 	data.selected_obj = NULL;
 	data.changing_properties = false;
